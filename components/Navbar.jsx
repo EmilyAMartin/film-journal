@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import './Navbar.css';
 import { Link, NavLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
+import './Navbar.css';
 
 export const Navbar = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -35,18 +35,18 @@ export const Navbar = () => {
 				</li>
 				<li>
 					<NavLink
-						to='/Artwork'
+						to='/Journal'
 						onClick={handleLinkClick}
 					>
-						Artwork
+						Journal
 					</NavLink>
 				</li>
 				<li>
 					<NavLink
-						to='/Gallery'
+						to='/Watchlist'
 						onClick={handleLinkClick}
 					>
-						Gallery
+						Watchlist
 					</NavLink>
 				</li>
 				<li>
@@ -57,10 +57,8 @@ export const Navbar = () => {
 						Account
 					</NavLink>
 				</li>
-				<li style={{ marginTop: 6 }}>
-					<Button> Login </Button>
-				</li>
 			</ul>
+			<Button>Login</Button>
 		</nav>
 	);
 };
