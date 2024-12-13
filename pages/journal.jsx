@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-const journal = () => {
-  return (
-    <div>journal</div>
-  )
-}
+const Journal = () => {
+	return <div>Journal</div>;
+};
 
-export default journal
+export default Journal;
