@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 
 const FilmCard = () => {
 	return (
-		<Card sx={{ maxWidth: 250 }}>
+		<Card sx={{ maxWidth: 150 }}>
 			<CardMedia
 				component='img'
-				height='350'
+				height='250'
 				image='/src/Images/1.jpg'
 				alt='film poster'
 			/>

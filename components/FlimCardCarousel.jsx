@@ -9,7 +9,7 @@ const FlimCardCarousel = () => {
 		dots: true,
 		infinite: false,
 		speed: 500,
-		slidesToShow: 6,
+		slidesToShow: 10,
 		slidesToScroll: 4,
 		initialSlide: 0,
 		responsive: [
