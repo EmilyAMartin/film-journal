@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import Button from '@mui/material/Button';
+import TheaterComedyOutlinedIcon from '@mui/icons-material/TheaterComedyOutlined';
+import LoginBtn from './LoginBtn';
 import './Navbar.css';
+import { Typography } from '@mui/material';
 
 export const Navbar = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -16,7 +18,7 @@ export const Navbar = () => {
 				to='/'
 				className='logo'
 			>
-				LOGO
+				<TheaterComedyOutlinedIcon fontSize='large' />
 			</Link>
 			<div
 				className='menu'
@@ -58,7 +60,7 @@ export const Navbar = () => {
 					</NavLink>
 				</li>
 			</ul>
-			<button>Login</button>
+			<LoginBtn />
 		</nav>
 	);
 };

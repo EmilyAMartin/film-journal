@@ -1,10 +1,18 @@
 import React from 'react';
-import FilmCard from '../Components/FilmCard';
+import FlimCardCarousel from '../Components/FlimCardCarousel';
 
 const Home = () => {
 	return (
 		<div>
-			<FilmCard />
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					margin: 24,
+				}}
+			>
+				<FlimCardCarousel />
+			</div>
 		</div>
 	);
 };

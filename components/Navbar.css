@@ -9,6 +9,10 @@ nav {
 	position: sticky;
 	z-index: 1;
 	top: 0;
+	font-family: 'Roboto';
+	margin-right: 2rem;
+	margin-left: 2rem;
+	margin-top: 1rem;
 }
 nav .logo {
 	font-size: 2rem;
