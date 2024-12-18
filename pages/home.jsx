@@ -20,16 +20,15 @@ const Home = () => {
 			<div
 				className='lading-section'
 				style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-			>
-				<img
-					src='./src/Images/2.png'
-					alt='logo portfolio'
-					width={950}
-				/>
-			</div>
+			></div>
 			<div
 				className='search-section'
-				style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					marginTop: 20,
+				}}
 			>
 				<TextField
 					value={searchQuery}
