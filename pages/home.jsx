@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, InputAdornment } from '@mui/material';
+import { TextField, InputAdornment, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FlimCardCarousel from '../Components/FlimCardCarousel';
 
@@ -21,6 +21,21 @@ const Home = () => {
 				className='lading-section'
 				style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 			></div>
+			<Typography
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}
+			>
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam dolorem, hic
+				odit mollitia libero vero rerum temporibus maiores modi nihil corporis, quae
+				error, animi reiciendis soluta! In soluta impedit officiis. Lorem ipsum
+				dolor sit amet consectetur adipisicing elit. Quam dolorem, hic odit mollitia
+				libero vero rerum temporibus maiores modi nihil corporis, quae error, animi
+				reiciendis soluta! In soluta impedit officiis.
+			</Typography>
+
 			<div
 				className='search-section'
 				style={{

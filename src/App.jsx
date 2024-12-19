@@ -16,9 +16,9 @@ function App() {
 	};
 	const darkTheme = createTheme({
 		palette: {
-			mode: toggleDarkMode ? 'dark' : 'light', // handle the dark mode state on toggle
+			mode: toggleDarkMode ? 'dark' : 'light',
 			primary: {
-				main: '#90caf9',
+				main: '#90caf1',
 			},
 			secondary: {
 				main: '#131052',

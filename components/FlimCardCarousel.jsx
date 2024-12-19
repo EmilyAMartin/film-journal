@@ -72,6 +72,36 @@ const FlimCardCarousel = () => {
 			<div>
 				<FilmCard />
 			</div>
+			<div>
+				<FilmCard />
+			</div>
+			<div>
+				<FilmCard />
+			</div>
+			<div>
+				<FilmCard />
+			</div>
+			<div>
+				<FilmCard />
+			</div>
+			<div>
+				<FilmCard />
+			</div>
+			<div>
+				<FilmCard />
+			</div>
+			<div>
+				<FilmCard />
+			</div>
+			<div>
+				<FilmCard />
+			</div>
+			<div>
+				<FilmCard />
+			</div>
+			<div>
+				<FilmCard />
+			</div>
 		</Slider>
 	);
 };

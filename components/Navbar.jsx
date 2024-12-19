@@ -4,7 +4,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import TheaterComedyOutlinedIcon from '@mui/icons-material/TheaterComedyOutlined';
 import LoginBtn from './LoginBtn';
 import './Navbar.css';
-import { Typography } from '@mui/material';
 
 export const Navbar = () => {
 	const [menuOpen, setMenuOpen] = useState(false);

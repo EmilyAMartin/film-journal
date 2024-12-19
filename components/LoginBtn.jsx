@@ -37,8 +37,7 @@ const LoginBtn = () => {
 
 	const buttonStyle = {
 		padding: '0.5rem',
-		hover: '#6c63ff50',
-		color: '#ffffff',
+		color: '#7a7a7a',
 		outline: 'none',
 		border: 'none',
 		borderRadius: '0.5rem',
@@ -47,7 +46,7 @@ const LoginBtn = () => {
 		cursor: 'pointer',
 		transition: '0.2s',
 		width: 150,
-		backgroundColor: isHover ? '#4640ad' : '#6c63ff',
+		backgroundColor: isHover ? '#e0e0e0' : '#e0e0e0',
 	};
 	const modalStyle = {
 		display: 'flex',
