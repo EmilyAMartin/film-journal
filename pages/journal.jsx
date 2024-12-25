@@ -1,10 +1,12 @@
 import React from 'react';
 import JournalCard from '../Components/JournalCard';
+import AddNewEntryBtn from '../Components/AddNewEntryBtn';
 import { Grid2 } from '@mui/material';
 
 const Journal = () => {
 	return (
 		<div>
+			<AddNewEntryBtn />
 			<Grid2
 				container
 				spacing={3}
