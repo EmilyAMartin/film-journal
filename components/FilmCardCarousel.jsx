@@ -4,7 +4,7 @@ import FilmCard from '../Components/FilmCard';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const FlimCardCarousel = () => {
+const FilmCardCarousel = () => {
 	const settings = {
 		dots: true,
 		infinite: false,
@@ -106,4 +106,4 @@ const FlimCardCarousel = () => {
 	);
 };
 
-export default FlimCardCarousel;
+export default FilmCardCarousel;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, InputAdornment, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import FlimCardCarousel from '../Components/FlimCardCarousel';
+import FilmCardCarousel from '../Components/FilmCardCarousel';
 
 const Home = () => {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -73,7 +73,7 @@ const Home = () => {
 					margin: 24,
 				}}
 			>
-				<FlimCardCarousel />
+				<FilmCardCarousel />
 			</div>
 		</div>
 	);
