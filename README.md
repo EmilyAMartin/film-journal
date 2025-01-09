@@ -8,4 +8,5 @@ The inspiration for this project came from my own need for a tool to track films
 
 ## Technology Stack
 React JS
+<br>
 API
