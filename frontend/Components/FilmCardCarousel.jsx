@@ -1,6 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
-import FilmCard from '../Components/FilmCard';
+import FilmCard from './FilmCard';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
