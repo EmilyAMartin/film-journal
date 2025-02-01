@@ -17,24 +17,15 @@ const Home = () => {
 
 	return (
 		<div>
+			<img
+				src='/src/Images/theater.jpg'
+				alt='image'
+				width={1950}
+			/>
 			<div
 				className='lading-section'
 				style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 			></div>
-			<Typography
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-				}}
-			>
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam dolorem, hic
-				odit mollitia libero vero rerum temporibus maiores modi nihil corporis, quae
-				error, animi reiciendis soluta! In soluta impedit officiis. Lorem ipsum
-				dolor sit amet consectetur adipisicing elit. Quam dolorem, hic odit mollitia
-				libero vero rerum temporibus maiores modi nihil corporis, quae error, animi
-				reiciendis soluta! In soluta impedit officiis.
-			</Typography>
 
 			<div
 				className='search-section'
