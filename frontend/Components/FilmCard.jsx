@@ -8,6 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import Box from '@mui/material/Box';
 
 const FilmCard = ({ film }) => {
@@ -16,6 +18,14 @@ const FilmCard = ({ film }) => {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 		if (favorites.some((f) => f === film)) {
 			setIsFavorited(true);
+		}
+	}, [film]);
+
+	const [isAdded, setIsAdded] = React.useState(false);
+	React.useEffect(() => {
+		const added = JSON.parse(localStorage.getItem('watchlist')) || [];
+		if (added.some((w) => w === film)) {
+			setIsAdded(true);
 		}
 	}, [film]);
 
@@ -31,6 +41,22 @@ const FilmCard = ({ film }) => {
 			favorites.push(film);
 			localStorage.setItem('favorites', JSON.stringify(favorites));
 			setIsFavorited(true);
+			console.log('Film added to list');
+		}
+	};
+
+	const handleToggleWatchlist = () => {
+		const added = JSON.parse(localStorage.getItem('watchlist')) || [];
+
+		if (isAdded) {
+			const updatedWatchlist = added.filter((w) => w !== film);
+			localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
+			setIsAdded(false);
+			console.log('Film removed from list');
+		} else {
+			added.push(film);
+			localStorage.setItem('watchlist', JSON.stringify(added));
+			setIsAdded(true);
 			console.log('Film added to list');
 		}
 	};
@@ -64,12 +90,14 @@ const FilmCard = ({ film }) => {
 				</Typography>
 			</CardContent>
 			<CardActions disableSpacing>
-				<IconButton
-					color='primary'
-					aria-label='add to list'
-				>
-					<PlaylistAddIcon />
-				</IconButton>
+				<Box sx={{ position: 'absolute', left: 8, bottom: 8 }}>
+					<IconButton
+						onClick={handleToggleWatchlist}
+						aria-label='favorite'
+					>
+						{isAdded ? <RemoveIcon color='error' /> : <AddIcon />}
+					</IconButton>
+				</Box>
 				<Box sx={{ position: 'absolute', right: 8, bottom: 8 }}>
 					<IconButton
 						onClick={handleToggleFavorite}

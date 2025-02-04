@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import FilmCard from '../Components/FilmCard';
+import Box from '@mui/material/Box';
 
 const Watchlist = () => {
-	const [favorites, setFavorites] = useState([]);
-	useEffect(() => {
-		const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-		setFavorites(savedFavorites);
+	const [added, setAdded] = React.useState([]);
+
+	React.useEffect(() => {
+		const storedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+		setAdded(storedWatchlist);
 	}, []);
 
 	return (
-		<div>
-			<h1>My Watchlist</h1>
-			<div style={{ display: 'flex', flexWrap: 'wrap' }}>
-				{favorites.map((film) => (
+		<Box>
+			<h3>No film added to watchlist</h3>
+			<Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+				{added.map((film) => (
 					<FilmCard
 						key={film}
-						//When API is set up switch to key={film.id}
 						film={film}
 					/>
 				))}
-			</div>
-		</div>
+			</Box>
+		</Box>
 	);
 };
 

@@ -3,7 +3,6 @@ import FilmCard from '../Components/FilmCard';
 import Box from '@mui/material/Box';
 
 const TopFilms = () => {
-	// Retrieve the favorites from localStorage
 	const [favorites, setFavorites] = React.useState([]);
 
 	React.useEffect(() => {
@@ -13,7 +12,7 @@ const TopFilms = () => {
 
 	return (
 		<Box>
-			<h1>Top Films</h1>
+			<h3>No film added to top films</h3>
 			<Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
 				{favorites.map((film) => (
 					<FilmCard
