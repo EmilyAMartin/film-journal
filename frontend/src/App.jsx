@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Navbar } from '../Components/Navbar';
 import Home from '../Pages/Home';
 import Journal from '../Pages/Journal';
+import TopFilms from '../Pages/TopFilms';
 import Watchlist from '../Pages/Watchlist';
 import Account from '../Pages/Account';
 import { Switch } from '@mui/material';
@@ -14,6 +15,7 @@ function App() {
 	const toggleDarkTheme = () => {
 		setToggleDarkMode(!toggleDarkMode);
 	};
+
 	const darkTheme = createTheme({
 		palette: {
 			mode: toggleDarkMode ? 'dark' : 'light',
@@ -23,8 +25,12 @@ function App() {
 			secondary: {
 				main: '#131052',
 			},
+			background: {
+				default: toggleDarkMode ? '#000000' : '#ffffff', // Set background color for dark mode to black
+			},
 		},
 	});
+
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<div className='App'>
@@ -37,6 +43,10 @@ function App() {
 					<Route
 						path='/Journal'
 						element={<Journal />}
+					/>
+					<Route
+						path='/TopFilms'
+						element={<TopFilms />}
 					/>
 					<Route
 						path='/Watchlist'

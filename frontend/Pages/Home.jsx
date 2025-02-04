@@ -33,7 +33,8 @@ const Home = () => {
 					display: 'flex',
 					alignItems: 'center',
 					justifyContent: 'center',
-					marginTop: 20,
+					marginTop: 50,
+					marginBottom: 50,
 				}}
 			>
 				<TextField

@@ -9,15 +9,14 @@ nav {
 	z-index: 1;
 	top: 0;
 	font-family: 'Roboto';
-	margin-right: 2rem;
-	margin-left: 2rem;
-	margin-top: 1rem;
+	background-color: black;
 }
 nav .logo {
 	font-size: 2rem;
 	font-weight: bold;
 	text-decoration: none;
 	color: #7a7a7a;
+	margin-left: 1rem;
 }
 nav ul {
 	display: flex;
