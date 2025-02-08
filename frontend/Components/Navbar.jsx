@@ -31,7 +31,7 @@ export const Navbar = () => {
 						to='/'
 						onClick={handleLinkClick}
 					>
-						Home
+						Films
 					</NavLink>
 				</li>
 				<li>
@@ -44,10 +44,10 @@ export const Navbar = () => {
 				</li>
 				<li>
 					<NavLink
-						to='/TopFilms'
+						to='/Favorites'
 						onClick={handleLinkClick}
 					>
-						Top Films
+						Favorites
 					</NavLink>
 				</li>
 				<li>

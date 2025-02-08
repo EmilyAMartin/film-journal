@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Navbar } from '../Components/Navbar';
 import Home from '../Pages/Home';
 import Journal from '../Pages/Journal';
-import TopFilms from '../Pages/TopFilms';
+import Favorites from '../Pages/Favorites';
 import Watchlist from '../Pages/Watchlist';
 import Account from '../Pages/Account';
 import { Switch } from '@mui/material';
@@ -45,8 +45,8 @@ function App() {
 						element={<Journal />}
 					/>
 					<Route
-						path='/TopFilms'
-						element={<TopFilms />}
+						path='/Favorites'
+						element={<Favorites />}
 					/>
 					<Route
 						path='/Watchlist'

@@ -1,20 +1,9 @@
-import React, { useState } from 'react';
-import { TextField, InputAdornment, Typography } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import React from 'react';
 import FilmCardCarousel from '../Components/FilmCardCarousel';
+import FilmSearch from '../Components/FilmSearch';
+import { Typography } from '@mui/material';
 
 const Home = () => {
-	const [searchQuery, setSearchQuery] = useState('');
-
-	const handleSearchChange = (event) => {
-		setSearchQuery(event.target.value);
-	};
-
-	const handleSearchSubmit = () => {
-		console.log('Searching for:', searchQuery);
-		// Add search logic //
-	};
-
 	return (
 		<div>
 			<img
@@ -26,45 +15,22 @@ const Home = () => {
 				className='lading-section'
 				style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 			></div>
-
 			<div
 				className='search-section'
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					marginTop: 50,
-					marginBottom: 50,
-				}}
+				style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 			>
-				<TextField
-					value={searchQuery}
-					onChange={handleSearchChange}
-					variant='outlined'
-					size='small'
-					label='Search'
-					InputProps={{
-						startAdornment: (
-							<InputAdornment position='start'>
-								<SearchIcon />
-							</InputAdornment>
-						),
-					}}
-					onKeyPress={(event) => {
-						if (event.key === 'Enter') {
-							handleSearchSubmit();
-						}
-					}}
-				/>
+				<FilmSearch />
 			</div>
+
 			<div
 				className='film-section'
 				style={{
 					display: 'flex',
 					flexDirection: 'column',
-					margin: 24,
+					margin: 100,
 				}}
 			>
+				<Typography>Popular This Week</Typography>
 				<FilmCardCarousel />
 			</div>
 		</div>

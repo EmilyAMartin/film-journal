@@ -5,7 +5,6 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,51 +12,47 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import Box from '@mui/material/Box';
 
 const FilmCard = ({ film }) => {
-	const [isFavorited, setIsFavorited] = React.useState(false);
-	React.useEffect(() => {
+	// Convert the film object to string for consistent comparison in localStorage
+	const filmKey = JSON.stringify(film);
+
+	// State initialization based on localStorage for 'favorites' and 'watchlist'
+	const [isFavorited, setIsFavorited] = React.useState(() => {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-		if (favorites.some((f) => f === film)) {
-			setIsFavorited(true);
-		}
-	}, [film]);
+		return favorites.includes(filmKey);
+	});
 
-	const [isAdded, setIsAdded] = React.useState(false);
-	React.useEffect(() => {
-		const added = JSON.parse(localStorage.getItem('watchlist')) || [];
-		if (added.some((w) => w === film)) {
-			setIsAdded(true);
-		}
-	}, [film]);
+	const [isAdded, setIsAdded] = React.useState(() => {
+		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+		return watchlist.includes(filmKey);
+	});
 
+	// Function to toggle 'isFavorited' state
 	const handleToggleFavorite = () => {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
 		if (isFavorited) {
-			const updatedFavorites = favorites.filter((f) => f !== film);
+			const updatedFavorites = favorites.filter((f) => f !== filmKey); // Remove from favorites
 			localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
 			setIsFavorited(false);
-			console.log('Film removed from list');
 		} else {
-			favorites.push(film);
+			favorites.push(filmKey); // Add to favorites
 			localStorage.setItem('favorites', JSON.stringify(favorites));
 			setIsFavorited(true);
-			console.log('Film added to list');
 		}
 	};
 
+	// Function to toggle 'isAdded' state
 	const handleToggleWatchlist = () => {
-		const added = JSON.parse(localStorage.getItem('watchlist')) || [];
+		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
 
 		if (isAdded) {
-			const updatedWatchlist = added.filter((w) => w !== film);
+			const updatedWatchlist = watchlist.filter((w) => w !== filmKey); // Remove from watchlist
 			localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
 			setIsAdded(false);
-			console.log('Film removed from list');
 		} else {
-			added.push(film);
-			localStorage.setItem('watchlist', JSON.stringify(added));
+			watchlist.push(filmKey); // Add to watchlist
+			localStorage.setItem('watchlist', JSON.stringify(watchlist));
 			setIsAdded(true);
-			console.log('Film added to list');
 		}
 	};
 
@@ -74,26 +69,14 @@ const FilmCard = ({ film }) => {
 					variant='body2'
 					sx={{ color: 'text.secondary' }}
 				>
-					{film} {/* Use dynamic data */}
-				</Typography>
-				<Typography
-					variant='body2'
-					sx={{ color: 'text.secondary' }}
-				>
-					{film}
-				</Typography>
-				<Typography
-					variant='body2'
-					sx={{ color: 'text.secondary' }}
-				>
-					{film}
+					{film} {/* Assuming film.title exists */}
 				</Typography>
 			</CardContent>
 			<CardActions disableSpacing>
 				<Box sx={{ position: 'absolute', left: 8, bottom: 8 }}>
 					<IconButton
 						onClick={handleToggleWatchlist}
-						aria-label='favorite'
+						aria-label='watchlist'
 					>
 						{isAdded ? <RemoveIcon color='error' /> : <AddIcon />}
 					</IconButton>
