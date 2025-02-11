@@ -9,6 +9,7 @@ import {
 	Typography,
 	CircularProgress,
 	InputAdornment,
+	Button,
 } from '@mui/material';
 import axios from 'axios';
 import SearchIcon from '@mui/icons-material/Search';
@@ -21,37 +22,60 @@ const FilmSearch = ({ onSearch }) => {
 	const [films, setFilms] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
+	const [page, setPage] = useState(1);
+	const [totalResults, setTotalResults] = useState(0);
+	const apiKey = '1234'; // Replace with your OMDb API key
 
 	useEffect(() => {
-		fetchFilms();
-	}, []);
+		if (searchQuery) {
+			fetchFilms();
+		}
+	}, [searchQuery, selectedYear, selectedGenre, page]);
 
 	const fetchFilms = async () => {
 		setLoading(true);
 		try {
-			const response = await axios.get('https://api.example.com/films'); //Replace//
-			setFilms(response.data);
+			// Build query string based on user inputs
+			const url = `https://www.omdbapi.com/?apikey=1234&s=${
+				searchQuery || '*'
+			}&type=movie&page=${page}&y=${selectedYear || ''}&genre=${
+				selectedGenre || ''
+			}`;
+
+			const response = await axios.get(url);
+
+			if (response.data.Response === 'True') {
+				setFilms((prevFilms) => [...prevFilms, ...response.data.Search]);
+				setTotalResults(Number(response.data.totalResults));
+			} else {
+				setFilms([]);
+				setError(response.data.Error);
+			}
 			setLoading(false);
 		} catch (err) {
-			setError('');
+			setError('Error fetching films. Please try again later.');
 			setLoading(false);
 		}
 	};
 
 	const handleSearch = () => {
+		// Handle filtering and sorting
 		const filteredFilms = films
 			.filter((film) => {
 				return (
-					(selectedYear ? film.year === selectedYear : true) &&
-					(selectedGenre ? film.genre === selectedGenre : true) &&
+					(selectedYear ? film.Year === selectedYear : true) &&
+					(selectedGenre
+						? film.Genre &&
+						  film.Genre.toLowerCase().includes(selectedGenre.toLowerCase())
+						: true) &&
 					(searchQuery
-						? film.title.toLowerCase().includes(searchQuery.toLowerCase())
+						? film.Title.toLowerCase().includes(searchQuery.toLowerCase())
 						: true)
 				);
 			})
 			.sort((a, b) => {
-				if (sortOrder === 'a-z') return a.title.localeCompare(b.title);
-				if (sortOrder === 'z-a') return b.title.localeCompare(a.title);
+				if (sortOrder === 'a-z') return a.Title.localeCompare(b.Title);
+				if (sortOrder === 'z-a') return b.Title.localeCompare(a.Title);
 				return 0;
 			});
 
@@ -68,8 +92,15 @@ const FilmSearch = ({ onSearch }) => {
 		handleSearch();
 	};
 
-	const years = [...new Set(films.map((film) => film.year))];
-	const genres = [...new Set(films.map((film) => film.genre))];
+	const handleLoadMore = () => {
+		if (films.length < totalResults) {
+			setPage((prevPage) => prevPage + 1); // Load next page
+		}
+	};
+
+	// Extract years and genres from the films array
+	const years = [...new Set(films.map((film) => film.Year))];
+	const genres = [...new Set(films.map((film) => film.Genre))];
 
 	return (
 		<Grid2
@@ -199,6 +230,23 @@ const FilmSearch = ({ onSearch }) => {
 					xs={12}
 				>
 					<Typography color='error'>{error}</Typography>
+				</Grid2>
+			)}
+
+			{/* Display "Load More" button */}
+			{films.length < totalResults && !loading && (
+				<Grid2
+					item
+					xs={12}
+				>
+					<Button
+						fullWidth
+						variant='contained'
+						color='primary'
+						onClick={handleLoadMore}
+					>
+						Load More
+					</Button>
 				</Grid2>
 			)}
 		</Grid2>

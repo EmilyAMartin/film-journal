@@ -2,7 +2,7 @@ import * as React from 'react';
 import FilmCard from '../Components/FilmCard';
 import Box from '@mui/material/Box';
 
-const TopFilms = () => {
+const Favorites = () => {
 	const [favorites, setFavorites] = React.useState([]);
 
 	React.useEffect(() => {
@@ -25,4 +25,4 @@ const TopFilms = () => {
 	);
 };
 
-export default TopFilms;
+export default Favorites;
