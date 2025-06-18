@@ -3,7 +3,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import CardMedia from '@mui/material/CardMedia';
 import CardActions from '@mui/material/CardActions';
 
 const JournalCard = () => {
@@ -11,13 +10,6 @@ const JournalCard = () => {
 		<div>
 			<Card sx={{ maxWidth: 350 }}>
 				<CardActionArea>
-					<CardMedia
-						component='img'
-						height='500'
-						image='/src/Images/1.jpg'
-						alt='film poster'
-					/>
-
 					<CardActions disableSpacing></CardActions>
 					<CardContent>
 						<Typography

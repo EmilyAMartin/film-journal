@@ -24,7 +24,7 @@ const FilmSearch = ({ onSearch }) => {
 	const [error, setError] = useState(null);
 	const [page, setPage] = useState(1);
 	const [totalResults, setTotalResults] = useState(0);
-	const apiKey = '1234'; // Replace with your OMDb API key
+	const apiKey = '1234';
 
 	useEffect(() => {
 		if (searchQuery) {
@@ -35,7 +35,6 @@ const FilmSearch = ({ onSearch }) => {
 	const fetchFilms = async () => {
 		setLoading(true);
 		try {
-			// Build query string based on user inputs
 			const url = `https://www.omdbapi.com/?apikey=1234&s=${
 				searchQuery || '*'
 			}&type=movie&page=${page}&y=${selectedYear || ''}&genre=${
@@ -59,7 +58,6 @@ const FilmSearch = ({ onSearch }) => {
 	};
 
 	const handleSearch = () => {
-		// Handle filtering and sorting
 		const filteredFilms = films
 			.filter((film) => {
 				return (
@@ -94,11 +92,10 @@ const FilmSearch = ({ onSearch }) => {
 
 	const handleLoadMore = () => {
 		if (films.length < totalResults) {
-			setPage((prevPage) => prevPage + 1); // Load next page
+			setPage((prevPage) => prevPage + 1);
 		}
 	};
 
-	// Extract years and genres from the films array
 	const years = [...new Set(films.map((film) => film.Year))];
 	const genres = [...new Set(films.map((film) => film.Genre))];
 

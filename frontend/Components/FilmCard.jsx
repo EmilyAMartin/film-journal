@@ -12,45 +12,37 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import Box from '@mui/material/Box';
 
 const FilmCard = ({ film }) => {
-	// Convert the film object to string for consistent comparison in localStorage
 	const filmKey = JSON.stringify(film);
-
-	// State initialization based on localStorage for 'favorites' and 'watchlist'
 	const [isFavorited, setIsFavorited] = React.useState(() => {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 		return favorites.includes(filmKey);
 	});
-
 	const [isAdded, setIsAdded] = React.useState(() => {
 		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
 		return watchlist.includes(filmKey);
 	});
-
-	// Function to toggle 'isFavorited' state
 	const handleToggleFavorite = () => {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
 		if (isFavorited) {
-			const updatedFavorites = favorites.filter((f) => f !== filmKey); // Remove from favorites
+			const updatedFavorites = favorites.filter((f) => f !== filmKey);
 			localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
 			setIsFavorited(false);
 		} else {
-			favorites.push(filmKey); // Add to favorites
+			favorites.push(filmKey);
 			localStorage.setItem('favorites', JSON.stringify(favorites));
 			setIsFavorited(true);
 		}
 	};
-
-	// Function to toggle 'isAdded' state
 	const handleToggleWatchlist = () => {
 		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
 
 		if (isAdded) {
-			const updatedWatchlist = watchlist.filter((w) => w !== filmKey); // Remove from watchlist
+			const updatedWatchlist = watchlist.filter((w) => w !== filmKey);
 			localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
 			setIsAdded(false);
 		} else {
-			watchlist.push(filmKey); // Add to watchlist
+			watchlist.push(filmKey);
 			localStorage.setItem('watchlist', JSON.stringify(watchlist));
 			setIsAdded(true);
 		}
@@ -69,7 +61,7 @@ const FilmCard = ({ film }) => {
 					variant='body2'
 					sx={{ color: 'text.secondary' }}
 				>
-					{film} {/* Assuming film.title exists */}
+					{film}
 				</Typography>
 			</CardContent>
 			<CardActions disableSpacing>

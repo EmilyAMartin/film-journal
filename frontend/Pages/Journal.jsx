@@ -17,10 +17,6 @@ const Journal = () => {
 				marginTop={4}
 			>
 				<JournalCard />
-				<JournalCard />
-				<JournalCard />
-				<JournalCard />
-				<JournalCard />
 			</Grid2>
 		</div>
 	);

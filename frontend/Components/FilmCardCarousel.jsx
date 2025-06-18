@@ -45,63 +45,6 @@ const FilmCardCarousel = () => {
 			<div>
 				<FilmCard />
 			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
-			<div>
-				<FilmCard />
-			</div>
 		</Slider>
 	);
 };

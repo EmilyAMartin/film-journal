@@ -1,40 +1,34 @@
 import React, { useState } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Route, Routes } from 'react-router-dom';
-import { Navbar } from '../Components/Navbar';
+import Navbar from '../Components/Navbar';
 import Home from '../Pages/Home';
 import Journal from '../Pages/Journal';
 import Favorites from '../Pages/Favorites';
 import Watchlist from '../Pages/Watchlist';
 import Account from '../Pages/Account';
-import { Switch } from '@mui/material';
 
 function App() {
-	const [toggleDarkMode, setToggleDarkMode] = useState(true);
-	const toggleDarkTheme = () => {
-		setToggleDarkMode(!toggleDarkMode);
-	};
-
-	const darkTheme = createTheme({
+	const [mode, setMode] = useState('light');
+	const theme = createTheme({
 		palette: {
-			mode: toggleDarkMode ? 'dark' : 'light',
-			primary: {
-				main: '#90caf1',
-			},
-			secondary: {
-				main: '#131052',
-			},
-			background: {
-				default: toggleDarkMode ? '#000000' : '#ffffff', // Set background color for dark mode to black
-			},
+			mode,
 		},
 	});
 
+	const toggleTheme = () => {
+		setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
+	};
+
 	return (
-		<ThemeProvider theme={darkTheme}>
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
 			<div className='App'>
-				<Navbar />
+				<Navbar
+					toggleTheme={toggleTheme}
+					mode={mode}
+				/>
 				<Routes>
 					<Route
 						path='/'
@@ -57,15 +51,6 @@ function App() {
 						element={<Account />}
 					/>
 				</Routes>
-			</div>
-			<CssBaseline />
-			<div
-				style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-			>
-				<Switch
-					checked={toggleDarkMode}
-					onChange={toggleDarkTheme}
-				/>
 			</div>
 		</ThemeProvider>
 	);

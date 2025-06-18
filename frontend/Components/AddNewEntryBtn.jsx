@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { green } from '@mui/material/colors';
-import { red } from '@mui/material/colors';
+import { green, red } from '@mui/material/colors';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,151 +9,128 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-import { TextField } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
+import Stack from '@mui/material/Stack';
 
-const AddArtworkBtn = () => {
+const SubmitButton = styled(Button)(({ theme }) => ({
+	color: theme.palette.getContrastText(green[500]),
+	backgroundColor: green[400],
+	'&:hover': {
+		backgroundColor: green[700],
+	},
+}));
+const CancelButton = styled(Button)(({ theme }) => ({
+	color: theme.palette.getContrastText(red[500]),
+	backgroundColor: red[500],
+	'&:hover': {
+		backgroundColor: red[700],
+	},
+}));
+
+const AddNewEntryBtn = () => {
 	const [searchQuery, setSearchQuery] = useState('');
+	const [open, setOpen] = useState(false);
 
-	const handleSearchChange = (event) => {
-		setSearchQuery(event.target.value);
-	};
-
+	const handleSearchChange = (event) => setSearchQuery(event.target.value);
 	const handleSearchSubmit = () => {
 		console.log('Searching for:', searchQuery);
-		// Add search logic //
 	};
-	const [open, setOpen] = useState(false);
-	const [isHover, setIsHover] = useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
-	const handleMouseEnter = () => {
-		setIsHover(true);
-	};
-	const handleMouseLeave = () => {
-		setIsHover(false);
-	};
-
-	const buttonStyle = {
-		padding: '0.5rem',
-		color: '#7a7a7a',
-		outline: 'none',
-		border: 'none',
-		borderRadius: '0.5rem',
-		fontSize: '1rem',
-		fontWeight: 500,
-		cursor: 'pointer',
-		transition: '0.2s',
-		width: 150,
-		backgroundColor: isHover ? '#e0e0e0' : '#e0e0e0',
-	};
-	const modalStyle = {
-		display: 'flex',
-		flexDirection: 'column',
-		position: 'absolute',
-		top: '50%',
-		left: '50%',
-		transform: 'translate(-50%, -50%)',
-		bgcolor: 'background.paper',
-		maxWidth: 800,
-	};
-	const SubmitButton = styled(Button)(({ theme }) => ({
-		color: theme.palette.getContrastText(green[500]),
-		backgroundColor: green[400],
-		'&:hover': {
-			backgroundColor: green[700],
-		},
-	}));
-	const CancelButton = styled(Button)(({ theme }) => ({
-		color: theme.palette.getContrastText(red[500]),
-		backgroundColor: red[500],
-		'&:hover': {
-			backgroundColor: red[700],
-		},
-	}));
 
 	return (
-		<div>
-			<button
-				style={buttonStyle}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
+		<Box>
+			<Button
+				variant='contained'
+				color='primary'
 				onClick={handleOpen}
+				sx={{
+					borderRadius: 2,
+					fontWeight: 500,
+					fontSize: '1rem',
+					width: 150,
+					bgcolor: '#e0e0e0',
+					color: '#7a7a7a',
+					textTransform: 'none',
+					'&:hover': { bgcolor: '#bdbdbd' },
+				}}
 			>
 				New Entry
-			</button>
+			</Button>
 			<Modal
 				open={open}
 				onClose={handleClose}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'
 			>
-				<Box sx={modalStyle}>
-					<div
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'center',
-							justifyContent: 'center',
-							gap: 25,
-							maxWidth: 800,
-							padding: 50,
-						}}
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						justifyContent: 'center',
+						position: 'absolute',
+						top: '50%',
+						left: '50%',
+						transform: 'translate(-50%, -50%)',
+						bgcolor: 'background.paper',
+						boxShadow: 24,
+						borderRadius: 2,
+						maxWidth: 800,
+						width: '90%',
+						p: 4,
+					}}
+				>
+					<Typography
+						variant='h5'
+						sx={{ mb: 3 }}
 					>
-						<Typography variant='h5'>New Entry</Typography>
-						<div
-							className='search-section'
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center',
-								marginTop: 20,
-							}}
-						>
-							<TextField
-								value={searchQuery}
-								onChange={handleSearchChange}
-								variant='outlined'
-								size='small'
-								label='Search'
-								InputProps={{
-									startAdornment: (
-										<InputAdornment position='start'>
-											<SearchIcon />
-										</InputAdornment>
-									),
-								}}
-								onKeyPress={(event) => {
-									if (event.key === 'Enter') {
-										handleSearchSubmit();
-									}
-								}}
-							/>
-						</div>
-						<FormControl
-							sx={{ width: '100%' }}
+						New Entry
+					</Typography>
+					<Stack
+						spacing={3}
+						sx={{ width: '100%' }}
+					>
+						<TextField
+							value={searchQuery}
+							onChange={handleSearchChange}
 							variant='outlined'
+							size='small'
+							label='Search'
+							InputProps={{
+								startAdornment: (
+									<InputAdornment position='start'>
+										<SearchIcon />
+									</InputAdornment>
+								),
+							}}
+							onKeyPress={(event) => {
+								if (event.key === 'Enter') {
+									handleSearchSubmit();
+								}
+							}}
+						/>
+						<FormControl
+							variant='outlined'
+							sx={{ width: '100%' }}
 						>
-							<InputLabel htmlFor='outlined-adornment- Title'>Title</InputLabel>
+							<InputLabel htmlFor='outlined-adornment-title'>Title</InputLabel>
 							<OutlinedInput
 								id='outlined-adornment-title'
-								endAdornment={<InputAdornment position='end'></InputAdornment>}
-								label='title'
+								label='Title'
 							/>
 						</FormControl>
-
 						<FormControl
-							sx={{ width: '100%' }}
 							variant='outlined'
+							sx={{ width: '100%' }}
 						>
 							<InputLabel htmlFor='outlined-adornment-date'>Date</InputLabel>
 							<OutlinedInput
 								id='outlined-adornment-date'
-								endAdornment={<InputAdornment position='end'></InputAdornment>}
-								label='date'
+								label='Date'
 							/>
 						</FormControl>
-
 						<TextField
 							id='outlined-multiline-static'
 							multiline
@@ -162,40 +138,32 @@ const AddArtworkBtn = () => {
 							rows={4}
 							sx={{ width: '100%' }}
 						/>
-
-						<FormControl
-							sx={{ width: '100%' }}
-							variant='outlined'
+						<Stack
+							direction='row'
+							spacing={6}
+							justifyContent='center'
+							sx={{ mt: 2 }}
 						>
-							<div
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									gap: 50,
-									marginTop: 25,
-								}}
+							<SubmitButton
+								variant='contained'
+								onClick={handleClose}
+								sx={{ textTransform: 'none' }}
 							>
-								<SubmitButton
-									sx={{ color: 'white' }}
-									variant='contained'
-									onClick={handleClose}
-								>
-									Submit
-								</SubmitButton>
-								<CancelButton
-									sx={{ color: 'white' }}
-									variant='contained'
-									onClick={handleClose}
-								>
-									Cancel
-								</CancelButton>
-							</div>
-						</FormControl>
-					</div>
+								Submit
+							</SubmitButton>
+							<CancelButton
+								variant='contained'
+								onClick={handleClose}
+								sx={{ textTransform: 'none' }}
+							>
+								Cancel
+							</CancelButton>
+						</Stack>
+					</Stack>
 				</Box>
 			</Modal>
-		</div>
+		</Box>
 	);
 };
 
-export default AddArtworkBtn;
+export default AddNewEntryBtn;
