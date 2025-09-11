@@ -44,6 +44,11 @@ const FilmCardCarousel = () => {
 		<Slider {...settings}>
 			<div>
 				<FilmCard />
+				<FilmCard />
+				<FilmCard />
+				<FilmCard />
+				<FilmCard />
+				<FilmCard />
 			</div>
 		</Slider>
 	);

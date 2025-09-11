@@ -17,6 +17,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
 
 const FilmCard = ({ film }) => {
 	const isFilmObj = film && typeof film === 'object';
@@ -239,19 +240,23 @@ const FilmCard = ({ film }) => {
 					/>
 				</DialogContent>
 				<DialogActions sx={{ px: 3, pb: 2 }}>
-					<IconButton
+					<Button
 						onClick={handleCloseJournal}
-						color='default'
+						variant='outlined'
+						color='inherit'
+						sx={{ borderRadius: 4 }}
 					>
 						Cancel
-					</IconButton>
-					<IconButton
+					</Button>
+					<Button
 						onClick={handleJournalSubmit}
+						variant='contained'
 						color='primary'
 						disabled={!journalText.trim() || !journalTitle.trim()}
+						sx={{ borderRadius: 4 }}
 					>
-						<AddCircleOutlineIcon />
-					</IconButton>
+						Submit
+					</Button>
 				</DialogActions>
 			</Dialog>
 		</Card>

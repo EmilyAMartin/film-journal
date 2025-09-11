@@ -25,7 +25,6 @@ const Home = () => {
 				direction='column'
 				sx={{ m: 12.5 }}
 			>
-				<Typography>Popular This Week</Typography>
 				<FilmCardCarousel />
 			</Stack>
 		</Box>
