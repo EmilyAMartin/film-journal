@@ -6,15 +6,17 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import Button from '@mui/material/Button';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
+import Divider from '@mui/material/Divider';
 
 const FilmCard = ({ film }) => {
 	const isFilmObj = film && typeof film === 'object';
@@ -84,7 +86,8 @@ const FilmCard = ({ film }) => {
 	return (
 		<Card
 			sx={{
-				maxWidth: 400,
+				width: 340,
+				maxWidth: '100%',
 				borderRadius: 4,
 				boxShadow: 6,
 				overflow: 'hidden',
@@ -95,17 +98,20 @@ const FilmCard = ({ film }) => {
 				},
 				bgcolor: 'background.paper',
 				mx: 'auto',
+				marginBottom: 4,
+				marginTop: 2,
 			}}
 		>
 			<Box sx={{ position: 'relative' }}>
 				<CardMedia
 					component='img'
-					height='250'
+					height={250}
 					image={filmPoster}
 					alt={filmTitle}
 					sx={{
 						objectFit: 'cover',
-						filter: 'brightness(0.97)',
+						width: '100%',
+						height: 250,
 					}}
 				/>
 				<Box
@@ -140,49 +146,51 @@ const FilmCard = ({ film }) => {
 					)}
 				</Box>
 			</Box>
+			<Divider />
 			<CardActions
 				sx={{
 					display: 'flex',
-					justifyContent: 'space-between',
+					justifyContent: 'center',
 					alignItems: 'center',
 					px: 2,
-					py: 1,
+					py: 1.5,
 					bgcolor: 'background.default',
 				}}
 			>
-				<Box>
-					<IconButton
-						onClick={handleToggleWatchlist}
-						aria-label='watchlist'
-						size='small'
-						color={isAdded ? 'primary' : 'default'}
+				<Box sx={{ display: 'flex', gap: 2 }}>
+					<Tooltip title={isAdded ? 'Remove from Watchlist' : 'Add to Watchlist'}>
+						<IconButton
+							onClick={handleToggleWatchlist}
+							aria-label='watchlist'
+							size='medium'
+							color={isAdded ? 'primary' : 'default'}
+						>
+							{isAdded ? <VisibilityIcon /> : <VisibilityOutlinedIcon />}
+						</IconButton>
+					</Tooltip>
+					<Tooltip
+						title={isFavorited ? 'Remove from Favorites' : 'Add to Favorites'}
 					>
-						{isAdded ? <RemoveIcon /> : <AddIcon />}
-					</IconButton>
-					<IconButton
-						onClick={handleToggleFavorite}
-						aria-label='favorite'
-						size='small'
-						color={isFavorited ? 'error' : 'default'}
-					>
-						{isFavorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-					</IconButton>
+						<IconButton
+							onClick={handleToggleFavorite}
+							aria-label='favorite'
+							size='medium'
+							color={isFavorited ? 'error' : 'default'}
+						>
+							{isFavorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+						</IconButton>
+					</Tooltip>
+					<Tooltip title='Add Journal Entry'>
+						<IconButton
+							onClick={handleOpenJournal}
+							aria-label='journal'
+							size='medium'
+							color='secondary'
+						>
+							<AddCircleOutlineIcon />
+						</IconButton>
+					</Tooltip>
 				</Box>
-				<Button
-					variant='contained'
-					size='small'
-					onClick={handleOpenJournal}
-					sx={{
-						textTransform: 'none',
-						borderRadius: 2,
-						boxShadow: 0,
-						fontWeight: 500,
-						bgcolor: 'primary.main',
-						'&:hover': { bgcolor: 'primary.dark' },
-					}}
-				>
-					Journal
-				</Button>
 			</CardActions>
 			<Dialog
 				open={journalOpen}
@@ -231,19 +239,19 @@ const FilmCard = ({ film }) => {
 					/>
 				</DialogContent>
 				<DialogActions sx={{ px: 3, pb: 2 }}>
-					<Button
+					<IconButton
 						onClick={handleCloseJournal}
-						variant='outlined'
+						color='default'
 					>
 						Cancel
-					</Button>
-					<Button
+					</IconButton>
+					<IconButton
 						onClick={handleJournalSubmit}
-						variant='contained'
+						color='primary'
 						disabled={!journalText.trim() || !journalTitle.trim()}
 					>
-						Save
-					</Button>
+						<AddCircleOutlineIcon />
+					</IconButton>
 				</DialogActions>
 			</Dialog>
 		</Card>
