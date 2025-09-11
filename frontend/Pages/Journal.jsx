@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardContent, Typography, Grid, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddNewEntryBtn from '../Components/AddNewEntryBtn';
 
 const Journal = () => {
 	const [entries, setEntries] = React.useState([]);
@@ -22,7 +21,6 @@ const Journal = () => {
 
 	return (
 		<div>
-			<AddNewEntryBtn />
 			<Grid
 				container
 				spacing={3}
