@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, CardContent, Typography, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Grid, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import AddNewEntryBtn from '../Components/AddNewEntryBtn';
 
 const Journal = () => {
@@ -7,8 +8,17 @@ const Journal = () => {
 
 	React.useEffect(() => {
 		const stored = JSON.parse(localStorage.getItem('journalEntries')) || [];
-		setEntries(stored.reverse()); // newest first
+		setEntries(stored.reverse());
 	}, []);
+
+	const handleDelete = (idxToDelete) => {
+		const stored = JSON.parse(localStorage.getItem('journalEntries')) || [];
+
+		const originalIdx = stored.length - 1 - idxToDelete;
+		const updated = stored.filter((_, idx) => idx !== originalIdx);
+		localStorage.setItem('journalEntries', JSON.stringify(updated));
+		setEntries(updated.slice().reverse());
+	};
 
 	return (
 		<div>
@@ -38,22 +48,46 @@ const Journal = () => {
 							md={5}
 							key={idx}
 						>
-							<Card sx={{ maxWidth: 350 }}>
+							<Card sx={{ maxWidth: 350, position: 'relative' }}>
+								<IconButton
+									aria-label='delete'
+									onClick={() => handleDelete(idx)}
+									sx={{
+										position: 'absolute',
+										top: 8,
+										right: 8,
+										zIndex: 1,
+										color: 'error.main',
+									}}
+								>
+									<DeleteIcon />
+								</IconButton>
 								<CardContent>
+									{/* Journal Title */}
 									<Typography
 										variant='h6'
 										gutterBottom
+										sx={{ fontWeight: 700 }}
 									>
-										{typeof entry.film === 'string'
-											? entry.film
-											: JSON.stringify(entry.film)}
+										{entry.title || 'Untitled Entry'}
 									</Typography>
+									{/* Date */}
 									<Typography
-										variant='body2'
-										sx={{ color: 'text.secondary', mb: 1 }}
+										variant='caption'
+										sx={{ color: 'text.secondary', mb: 1, display: 'block' }}
 									>
 										{new Date(entry.date).toLocaleString()}
 									</Typography>
+									{/* Movie Title */}
+									<Typography
+										variant='subtitle2'
+										sx={{ fontStyle: 'italic', mb: 1 }}
+									>
+										{typeof entry.film === 'string'
+											? entry.film
+											: entry.film?.title || JSON.stringify(entry.film)}
+									</Typography>
+									{/* Entry Text */}
 									<Typography variant='body1'>{entry.text}</Typography>
 								</CardContent>
 							</Card>
