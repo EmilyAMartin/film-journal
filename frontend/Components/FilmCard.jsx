@@ -87,7 +87,7 @@ const FilmCard = ({ film }) => {
 	return (
 		<Card
 			sx={{
-				width: 340,
+				width: 200,
 				maxWidth: '100%',
 				borderRadius: 4,
 				boxShadow: 6,

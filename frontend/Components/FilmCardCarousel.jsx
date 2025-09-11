@@ -9,8 +9,8 @@ const FilmCardCarousel = () => {
 		dots: true,
 		infinite: false,
 		speed: 500,
-		slidesToShow: 10,
-		slidesToScroll: 4,
+		slidesToShow: 6,
+		slidesToScroll: 2,
 		initialSlide: 0,
 		responsive: [
 			{
@@ -42,14 +42,18 @@ const FilmCardCarousel = () => {
 
 	return (
 		<Slider {...settings}>
-			<div>
-				<FilmCard />
-				<FilmCard />
-				<FilmCard />
-				<FilmCard />
-				<FilmCard />
-				<FilmCard />
-			</div>
+			<FilmCard />
+			<FilmCard />
+			<FilmCard />
+			<FilmCard />
+			<FilmCard />
+			<FilmCard />
+			<FilmCard />
+			<FilmCard />
+			<FilmCard />
+			<FilmCard />
+			<FilmCard />
+			<FilmCard />
 		</Slider>
 	);
 };
