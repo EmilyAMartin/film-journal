@@ -7,7 +7,6 @@ const getFavorites = () => JSON.parse(localStorage.getItem('favorites')) || [];
 const Favorites = () => {
 	const [favorites, setFavorites] = React.useState(getFavorites());
 
-	// Listen for changes to localStorage from other tabs/components
 	React.useEffect(() => {
 		const handleStorage = (e) => {
 			if (e.key === 'favorites') {
@@ -18,7 +17,6 @@ const Favorites = () => {
 		return () => window.removeEventListener('storage', handleStorage);
 	}, []);
 
-	// Poll for changes in localStorage (same tab)
 	React.useEffect(() => {
 		const interval = setInterval(() => {
 			const current = getFavorites();
@@ -30,9 +28,26 @@ const Favorites = () => {
 	}, [favorites]);
 
 	return (
-		<Box>
-			{favorites.length === 0 && <h3>No film added to top films</h3>}
-			<Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'center',
+				minHeight: '60vh',
+			}}
+		>
+			{favorites.length === 0 && (
+				<h3 style={{ textAlign: 'center' }}>No film added to favorites</h3>
+			)}
+			<Box
+				sx={{
+					display: 'flex',
+					flexWrap: 'wrap',
+					justifyContent: 'center',
+					width: '100%',
+				}}
+			>
 				{favorites.map((film) => (
 					<FilmCard
 						key={typeof film === 'object' ? JSON.stringify(film) : film}

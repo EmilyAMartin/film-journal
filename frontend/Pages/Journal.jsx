@@ -1,5 +1,12 @@
 import React from 'react';
-import { Card, CardContent, Typography, Grid, IconButton } from '@mui/material';
+import {
+	Card,
+	CardContent,
+	Typography,
+	Grid,
+	IconButton,
+	Box,
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const Journal = () => {
@@ -12,7 +19,6 @@ const Journal = () => {
 
 	const handleDelete = (idxToDelete) => {
 		const stored = JSON.parse(localStorage.getItem('journalEntries')) || [];
-
 		const originalIdx = stored.length - 1 - idxToDelete;
 		const updated = stored.filter((_, idx) => idx !== originalIdx);
 		localStorage.setItem('journalEntries', JSON.stringify(updated));
@@ -20,7 +26,14 @@ const Journal = () => {
 	};
 
 	return (
-		<div>
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				minHeight: '80vh',
+			}}
+		>
 			<Grid
 				container
 				spacing={3}
@@ -31,12 +44,17 @@ const Journal = () => {
 				marginTop={4}
 			>
 				{entries.length === 0 ? (
-					<Typography
-						variant='body1'
-						sx={{ mt: 4 }}
+					<Box
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							minHeight: '60vh',
+							width: '100%',
+						}}
 					>
-						No journal entries yet.
-					</Typography>
+						<h3 style={{ textAlign: 'center' }}>No journal entries yet.</h3>
+					</Box>
 				) : (
 					entries.map((entry, idx) => (
 						<Grid
@@ -45,6 +63,8 @@ const Journal = () => {
 							sm={8}
 							md={5}
 							key={idx}
+							display='flex'
+							justifyContent='center'
 						>
 							<Card sx={{ maxWidth: 350, position: 'relative' }}>
 								<IconButton
@@ -61,32 +81,38 @@ const Journal = () => {
 									<DeleteIcon />
 								</IconButton>
 								<CardContent>
-									{/* Journal Title */}
 									<Typography
 										variant='h6'
 										gutterBottom
-										sx={{ fontWeight: 700 }}
+										sx={{ fontWeight: 700, textAlign: 'center' }}
 									>
 										{entry.title || 'Untitled Entry'}
 									</Typography>
-									{/* Date */}
 									<Typography
 										variant='caption'
-										sx={{ color: 'text.secondary', mb: 1, display: 'block' }}
+										sx={{
+											color: 'text.secondary',
+											mb: 1,
+											display: 'block',
+											textAlign: 'center',
+										}}
 									>
 										{new Date(entry.date).toLocaleString()}
 									</Typography>
-									{/* Movie Title */}
 									<Typography
 										variant='subtitle2'
-										sx={{ fontStyle: 'italic', mb: 1 }}
+										sx={{ fontStyle: 'italic', mb: 1, textAlign: 'center' }}
 									>
 										{typeof entry.film === 'string'
 											? entry.film
 											: entry.film?.title || JSON.stringify(entry.film)}
 									</Typography>
-									{/* Entry Text */}
-									<Typography variant='body1'>{entry.text}</Typography>
+									<Typography
+										variant='body1'
+										sx={{ textAlign: 'center' }}
+									>
+										{entry.text}
+									</Typography>
 								</CardContent>
 							</Card>
 						</Grid>

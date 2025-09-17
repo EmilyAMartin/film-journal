@@ -28,9 +28,26 @@ const Watchlist = () => {
 	}, [added]);
 
 	return (
-		<Box>
-			{added.length === 0 && <h3>No film added to watchlist</h3>}
-			<Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'center',
+				minHeight: '60vh',
+			}}
+		>
+			{added.length === 0 && (
+				<h3 style={{ textAlign: 'center' }}>No film added to watchlist</h3>
+			)}
+			<Box
+				sx={{
+					display: 'flex',
+					flexWrap: 'wrap',
+					justifyContent: 'center',
+					width: '100%',
+				}}
+			>
 				{added.map((film) => (
 					<FilmCard
 						key={typeof film === 'object' ? JSON.stringify(film) : film}
