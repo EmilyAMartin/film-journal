@@ -43,17 +43,6 @@ const FilmCardCarousel = () => {
 	return (
 		<Slider {...settings}>
 			<FilmCard />
-			<FilmCard />
-			<FilmCard />
-			<FilmCard />
-			<FilmCard />
-			<FilmCard />
-			<FilmCard />
-			<FilmCard />
-			<FilmCard />
-			<FilmCard />
-			<FilmCard />
-			<FilmCard />
 		</Slider>
 	);
 };
