@@ -26,27 +26,32 @@ const FilmCard = ({ film }) => {
 	const filmPoster =
 		isFilmObj && film.poster ? film.poster : '/src/Images/1.jpg';
 
-	const filmKey = JSON.stringify(film);
-	const [isFavorited, setIsFavorited] = React.useState(() => {
-		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-		return favorites.includes(filmKey);
-	});
-	const [isAdded, setIsAdded] = React.useState(() => {
-		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
-		return watchlist.includes(filmKey);
-	});
+	// Use a unique, stable identifier for each film
+	const filmId = isFilmObj ? film.id || film.imdbID || film.title : film;
+
+	const [isFavorited, setIsFavorited] = React.useState(false);
+	const [isAdded, setIsAdded] = React.useState(false);
 	const [journalOpen, setJournalOpen] = React.useState(false);
 	const [journalText, setJournalText] = React.useState('');
 	const [journalTitle, setJournalTitle] = React.useState('');
 
+	React.useEffect(() => {
+		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+		setIsFavorited(favorites.includes(filmId));
+		setIsAdded(watchlist.includes(filmId));
+	}, [filmId]);
+
 	const handleToggleFavorite = () => {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 		if (isFavorited) {
-			const updatedFavorites = favorites.filter((f) => f !== filmKey);
+			const updatedFavorites = favorites.filter((f) => f !== filmId);
 			localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
 			setIsFavorited(false);
 		} else {
-			favorites.push(filmKey);
+			if (!favorites.includes(filmId)) {
+				favorites.push(filmId);
+			}
 			localStorage.setItem('favorites', JSON.stringify(favorites));
 			setIsFavorited(true);
 		}
@@ -55,11 +60,13 @@ const FilmCard = ({ film }) => {
 	const handleToggleWatchlist = () => {
 		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
 		if (isAdded) {
-			const updatedWatchlist = watchlist.filter((w) => w !== filmKey);
+			const updatedWatchlist = watchlist.filter((w) => w !== filmId);
 			localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
 			setIsAdded(false);
 		} else {
-			watchlist.push(filmKey);
+			if (!watchlist.includes(filmId)) {
+				watchlist.push(filmId);
+			}
 			localStorage.setItem('watchlist', JSON.stringify(watchlist));
 			setIsAdded(true);
 		}
