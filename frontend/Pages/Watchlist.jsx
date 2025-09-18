@@ -6,7 +6,6 @@ import { getWatchlist } from '../storageService';
 const Watchlist = () => {
 	const [added, setAdded] = useState(getWatchlist());
 
-	// Listen for changes from other tabs/windows
 	useEffect(() => {
 		const handleStorage = (e) => {
 			if (e.key === 'watchlist') {
@@ -17,7 +16,6 @@ const Watchlist = () => {
 		return () => window.removeEventListener('storage', handleStorage);
 	}, []);
 
-	// Optional polling for in-app changes (can be removed if you control all changes)
 	useEffect(() => {
 		const interval = setInterval(() => {
 			const current = getWatchlist();

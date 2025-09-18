@@ -25,10 +25,7 @@ const FilmCard = ({ film }) => {
 	const filmYear = isFilmObj && film.year ? film.year : '';
 	const filmPoster =
 		isFilmObj && film.poster ? film.poster : '/src/Images/1.jpg';
-
-	// Use a unique, stable identifier for each film
 	const filmId = isFilmObj ? film.id || film.imdbID || film.title : film;
-
 	const [isFavorited, setIsFavorited] = React.useState(false);
 	const [isAdded, setIsAdded] = React.useState(false);
 	const [journalOpen, setJournalOpen] = React.useState(false);
