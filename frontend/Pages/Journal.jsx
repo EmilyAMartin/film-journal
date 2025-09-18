@@ -31,7 +31,8 @@ const Journal = () => {
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				minHeight: '80vh',
+				justifyContent: 'center',
+				minHeight: '60vh',
 			}}
 		>
 			<Grid
@@ -41,7 +42,6 @@ const Journal = () => {
 				display={'flex'}
 				alignItems={'center'}
 				justifyContent={'center'}
-				marginTop={4}
 			>
 				{entries.length === 0 ? (
 					<Box
