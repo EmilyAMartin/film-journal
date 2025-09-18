@@ -8,21 +8,24 @@ import {
 	Box,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {
+	getJournalEntries,
+	deleteJournalEntryByIndex,
+} from '../storageService';
 
 const Journal = () => {
 	const [entries, setEntries] = React.useState([]);
 
 	React.useEffect(() => {
-		const stored = JSON.parse(localStorage.getItem('journalEntries')) || [];
-		setEntries(stored.reverse());
+		const stored = getJournalEntries().reverse();
+		setEntries(stored);
 	}, []);
 
-	const handleDelete = (idxToDelete) => {
-		const stored = JSON.parse(localStorage.getItem('journalEntries')) || [];
-		const originalIdx = stored.length - 1 - idxToDelete;
-		const updated = stored.filter((_, idx) => idx !== originalIdx);
-		localStorage.setItem('journalEntries', JSON.stringify(updated));
-		setEntries(updated.slice().reverse());
+	const handleDelete = (displayedIndex) => {
+		const originalIndex = entries.length - 1 - displayedIndex;
+		deleteJournalEntryByIndex(originalIndex);
+		const updated = getJournalEntries().reverse();
+		setEntries(updated);
 	};
 
 	return (

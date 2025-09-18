@@ -1,13 +1,13 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import FilmCard from '../Components/FilmCard';
 import Box from '@mui/material/Box';
-
-const getWatchlist = () => JSON.parse(localStorage.getItem('watchlist')) || [];
+import { getWatchlist } from '../storageService';
 
 const Watchlist = () => {
-	const [added, setAdded] = React.useState(getWatchlist());
+	const [added, setAdded] = useState(getWatchlist());
 
-	React.useEffect(() => {
+	// Listen for changes from other tabs/windows
+	useEffect(() => {
 		const handleStorage = (e) => {
 			if (e.key === 'watchlist') {
 				setAdded(getWatchlist());
@@ -17,7 +17,8 @@ const Watchlist = () => {
 		return () => window.removeEventListener('storage', handleStorage);
 	}, []);
 
-	React.useEffect(() => {
+	// Optional polling for in-app changes (can be removed if you control all changes)
+	useEffect(() => {
 		const interval = setInterval(() => {
 			const current = getWatchlist();
 			if (JSON.stringify(current) !== JSON.stringify(added)) {

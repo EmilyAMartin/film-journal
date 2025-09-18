@@ -1,13 +1,12 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import FilmCard from '../Components/FilmCard';
 import Box from '@mui/material/Box';
-
-const getFavorites = () => JSON.parse(localStorage.getItem('favorites')) || [];
+import { getFavorites } from '../storageService';
 
 const Favorites = () => {
-	const [favorites, setFavorites] = React.useState(getFavorites());
+	const [favorites, setFavorites] = useState(getFavorites());
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const handleStorage = (e) => {
 			if (e.key === 'favorites') {
 				setFavorites(getFavorites());
@@ -17,7 +16,7 @@ const Favorites = () => {
 		return () => window.removeEventListener('storage', handleStorage);
 	}, []);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const interval = setInterval(() => {
 			const current = getFavorites();
 			if (JSON.stringify(current) !== JSON.stringify(favorites)) {
