@@ -1,5 +1,7 @@
 import FilmCardCarousel from '../Components/FilmCardCarousel';
 import FilmSearch from '../Components/FilmSearch';
+import PopularFilms from '../Components/PopularFilms'; // ✅
+
 import { Typography, Box, Stack } from '@mui/material';
 
 const Home = () => {
@@ -11,6 +13,7 @@ const Home = () => {
 				alignItems='center'
 				justifyContent='center'
 			></Box>
+
 			<Box
 				className='search-section'
 				display='flex'
@@ -20,13 +23,16 @@ const Home = () => {
 			>
 				<FilmSearch />
 			</Box>
+
 			<Stack
 				className='film-section'
 				direction='column'
 				sx={{ m: 12.5 }}
-			>
-				<FilmCardCarousel />
-			</Stack>
+			></Stack>
+
+			<Box sx={{ px: 6 }}>
+				<PopularFilms /> {/* ✅ this renders the section */}
+			</Box>
 		</Box>
 	);
 };

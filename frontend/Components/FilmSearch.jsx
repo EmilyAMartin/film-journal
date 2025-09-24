@@ -15,6 +15,8 @@ const FilmSearch = () => {
 	const [results, setResults] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
+
+	// Debounced search handler
 	const handleSearch = debounce(async (searchTerm) => {
 		if (!searchTerm) {
 			setResults([]);
@@ -35,13 +37,14 @@ const FilmSearch = () => {
 		}
 	}, 500);
 
+	// Trigger search when query changes
 	useEffect(() => {
 		handleSearch(query);
 		return () => handleSearch.cancel();
 	}, [query]);
 
 	return (
-		<Box sx={{ width: '100%', maxWidth: 600 }}>
+		<Box sx={{ width: '100%', maxWidth: 600, mx: 'auto', mt: 4 }}>
 			<TextField
 				fullWidth
 				label='Search Movies'
@@ -58,15 +61,25 @@ const FilmSearch = () => {
 					{error}
 				</Typography>
 			)}
+
 			<Box sx={{ mt: 3 }}>
 				{results.map((movie) => (
 					<Card
 						key={movie.imdbID}
-						sx={{ mb: 2 }}
+						sx={{ mb: 2, display: 'flex' }}
 					>
+						{movie.Poster && movie.Poster !== 'N/A' && (
+							<Box sx={{ width: 100, flexShrink: 0 }}>
+								<img
+									src={movie.Poster}
+									alt={`${movie.Title} poster`}
+									style={{ width: '100%', height: 'auto' }}
+								/>
+							</Box>
+						)}
 						<CardContent>
 							<Typography variant='h6'>{movie.Title}</Typography>
-							<Typography variant='body2'>{movie.Year}</Typography>
+							<Typography variant='body2'>Year: {movie.Year}</Typography>
 						</CardContent>
 					</Card>
 				))}
