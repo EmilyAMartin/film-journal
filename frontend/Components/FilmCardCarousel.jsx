@@ -1,10 +1,11 @@
+// src/Components/FilmCardCarousel.js
 import React from 'react';
 import Slider from 'react-slick';
 import FilmCard from './FilmCard';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-const FilmCardCarousel = () => {
+const FilmCardCarousel = ({ films = [] }) => {
 	const settings = {
 		dots: true,
 		infinite: false,
@@ -40,9 +41,24 @@ const FilmCardCarousel = () => {
 		],
 	};
 
+	// If no films, you could show a placeholder or nothing
+	if (!films || films.length === 0) {
+		return null;
+	}
+
 	return (
 		<Slider {...settings}>
-			<FilmCard />
+			{films.map((film) => (
+				<FilmCard
+					key={film.imdbID}
+					film={{
+						title: film.Title,
+						year: film.Year,
+						poster: film.Poster,
+						id: film.imdbID,
+					}}
+				/>
+			))}
 		</Slider>
 	);
 };

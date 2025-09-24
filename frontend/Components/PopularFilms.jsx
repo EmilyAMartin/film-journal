@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Grid, CircularProgress } from '@mui/material';
-import FilmCard from './FilmCard';
+import { Box, Typography, CircularProgress } from '@mui/material';
+import FilmCardCarousel from './FilmCardCarousel';
 import { getPopularMovies } from '../src/api/movieService';
 
 const PopularFilms = () => {
@@ -9,56 +9,48 @@ const PopularFilms = () => {
 	const [error, setError] = useState('');
 
 	useEffect(() => {
-		const loadPopular = async () => {
+		const fetchPopular = async () => {
 			try {
 				const movies = await getPopularMovies();
 				setFilms(movies);
 			} catch (err) {
-				setError('Failed to load popular films.');
 				console.error(err);
+				setError('Failed to load popular films.');
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		loadPopular();
+		fetchPopular();
 	}, []);
 
-	if (loading) return <CircularProgress sx={{ mt: 4 }} />;
-	if (error) return <Typography color='error'>{error}</Typography>;
+	if (loading) {
+		return (
+			<Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+				<CircularProgress />
+			</Box>
+		);
+	}
+	if (error) {
+		return (
+			<Typography
+				color='error'
+				sx={{ mt: 2, textAlign: 'center' }}
+			>
+				{error}
+			</Typography>
+		);
+	}
 
 	return (
-		<Box sx={{ mt: 6 }}>
+		<Box sx={{ mt: 4, px: 2 }}>
 			<Typography
 				variant='h5'
 				gutterBottom
 			>
 				Popular Films
 			</Typography>
-			<Grid
-				container
-				spacing={3}
-			>
-				{films.map((film) => (
-					<Grid
-						item
-						xs={12}
-						sm={6}
-						md={4}
-						lg={3}
-						key={film.imdbID}
-					>
-						<FilmCard
-							film={{
-								title: film.Title,
-								year: film.Year,
-								poster: film.Poster,
-								id: film.imdbID,
-							}}
-						/>
-					</Grid>
-				))}
-			</Grid>
+			<FilmCardCarousel films={films} />
 		</Box>
 	);
 };
