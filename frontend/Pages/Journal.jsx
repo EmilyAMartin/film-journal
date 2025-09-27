@@ -16,6 +16,7 @@ import {
 
 const Journal = () => {
 	const [entries, setEntries] = React.useState([]);
+	const [expandedEntries, setExpandedEntries] = React.useState({});
 
 	React.useEffect(() => {
 		const stored = getJournalEntries().reverse();
@@ -29,6 +30,13 @@ const Journal = () => {
 		setEntries(updated);
 	};
 
+	const toggleExpanded = (index) => {
+		setExpandedEntries((prev) => ({
+			...prev,
+			[index]: !prev[index],
+		}));
+	};
+
 	return (
 		<div
 			style={{
@@ -37,6 +45,7 @@ const Journal = () => {
 				alignItems: 'center',
 				justifyContent: 'center',
 				minHeight: '60vh',
+				marginTop: 40,
 			}}
 		>
 			<Grid
@@ -62,7 +71,14 @@ const Journal = () => {
 				) : (
 					entries.map((entry, idx) => {
 						const film = entry.film || {};
-						const poster = film.poster || '/src/Images/1.jpg'; // fallback image
+						const poster = film.poster || '/src/Images/1.jpg';
+
+						const text = entry.text || '';
+						const isLong = text.length > 200;
+						const isExpanded = expandedEntries[idx];
+						const displayText = isExpanded
+							? text
+							: `${text.slice(0, 200)}${isLong ? '...' : ''}`;
 
 						return (
 							<Grid
@@ -74,28 +90,31 @@ const Journal = () => {
 								display='flex'
 								justifyContent='center'
 							>
-								<Card sx={{ maxWidth: 350, position: 'relative' }}>
+								<Card sx={{ maxWidth: 450, position: 'relative' }}>
 									<IconButton
 										aria-label='delete'
 										onClick={() => handleDelete(idx)}
 										sx={{
 											position: 'absolute',
-											top: 8,
+											top: 4,
 											right: 8,
 											zIndex: 1,
-											color: 'error.main',
+											color: 'black',
 										}}
 									>
 										<DeleteIcon />
 									</IconButton>
 
-									{/* 🎬 Film Poster */}
 									<CardMedia
 										component='img'
-										height='200'
 										image={poster}
 										alt={film.title || 'Film poster'}
-										sx={{ objectFit: 'cover' }}
+										sx={{
+											height: 300,
+											width: '100%',
+											objectFit: 'contain',
+											bgcolor: '#f5f5f5',
+										}}
 									/>
 
 									<CardContent>
@@ -108,18 +127,6 @@ const Journal = () => {
 										</Typography>
 
 										<Typography
-											variant='caption'
-											sx={{
-												color: 'text.secondary',
-												mb: 1,
-												display: 'block',
-												textAlign: 'center',
-											}}
-										>
-											{new Date(entry.date).toLocaleString()}
-										</Typography>
-
-										<Typography
 											variant='subtitle2'
 											sx={{ fontStyle: 'italic', mb: 1, textAlign: 'center' }}
 										>
@@ -127,10 +134,24 @@ const Journal = () => {
 										</Typography>
 
 										<Typography
-											variant='body1'
-											sx={{ textAlign: 'center' }}
+											variant='body2'
+											sx={{ textAlign: 'center', whiteSpace: 'pre-wrap' }}
 										>
-											{entry.text}
+											{displayText}
+											{isLong && (
+												<Box
+													component='span'
+													sx={{
+														color: 'primary.main',
+														cursor: 'pointer',
+														fontWeight: 500,
+														ml: 1,
+													}}
+													onClick={() => toggleExpanded(idx)}
+												>
+													{isExpanded ? 'Show Less' : 'Read More'}
+												</Box>
+											)}
 										</Typography>
 									</CardContent>
 								</Card>

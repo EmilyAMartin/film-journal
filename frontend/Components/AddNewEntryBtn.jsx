@@ -20,6 +20,7 @@ const SubmitButton = styled(Button)(({ theme }) => ({
 		backgroundColor: green[700],
 	},
 }));
+
 const CancelButton = styled(Button)(({ theme }) => ({
 	color: theme.palette.getContrastText(red[500]),
 	backgroundColor: red[500],
@@ -61,15 +62,11 @@ const AddNewEntryBtn = () => {
 			<Modal
 				open={open}
 				onClose={handleClose}
-				aria-labelledby='modal-modal-title'
+				aria-labelledby='new-entry-title'
 				aria-describedby='modal-modal-description'
 			>
 				<Box
 					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						justifyContent: 'center',
 						position: 'absolute',
 						top: '50%',
 						left: '50%',
@@ -79,10 +76,13 @@ const AddNewEntryBtn = () => {
 						borderRadius: 2,
 						maxWidth: 800,
 						width: '90%',
+						maxHeight: '90vh',
+						overflowY: 'auto',
 						p: 4,
 					}}
 				>
 					<Typography
+						id='new-entry-title'
 						variant='h5'
 						sx={{ mb: 3 }}
 					>
@@ -111,6 +111,7 @@ const AddNewEntryBtn = () => {
 								}
 							}}
 						/>
+
 						<FormControl
 							variant='outlined'
 							sx={{ width: '100%' }}
@@ -121,6 +122,7 @@ const AddNewEntryBtn = () => {
 								label='Title'
 							/>
 						</FormControl>
+
 						<FormControl
 							variant='outlined'
 							sx={{ width: '100%' }}
@@ -131,13 +133,19 @@ const AddNewEntryBtn = () => {
 								label='Date'
 							/>
 						</FormControl>
+
 						<TextField
 							id='outlined-multiline-static'
 							multiline
 							label='Comments'
-							rows={4}
-							sx={{ width: '100%' }}
+							minRows={4}
+							maxRows={12}
+							sx={{
+								width: '100%',
+								overflow: 'auto',
+							}}
 						/>
+
 						<Stack
 							direction='row'
 							spacing={6}
