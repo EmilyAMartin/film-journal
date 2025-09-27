@@ -26,6 +26,7 @@ const FilmCard = ({ film }) => {
 	const filmPoster =
 		isFilmObj && film.poster ? film.poster : '/src/Images/1.jpg';
 	const filmId = isFilmObj ? film.id || film.imdbID || film.title : film;
+
 	const [isFavorited, setIsFavorited] = React.useState(false);
 	const [isAdded, setIsAdded] = React.useState(false);
 	const [journalOpen, setJournalOpen] = React.useState(false);
@@ -35,19 +36,27 @@ const FilmCard = ({ film }) => {
 	React.useEffect(() => {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
-		setIsFavorited(favorites.includes(filmId));
-		setIsAdded(watchlist.includes(filmId));
+
+		setIsFavorited(favorites.some((f) => f.id === filmId));
+		setIsAdded(watchlist.some((w) => w.id === filmId));
 	}, [filmId]);
 
 	const handleToggleFavorite = () => {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
 		if (isFavorited) {
-			const updatedFavorites = favorites.filter((f) => f !== filmId);
+			const updatedFavorites = favorites.filter((f) => f.id !== filmId);
 			localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
 			setIsFavorited(false);
 		} else {
-			if (!favorites.includes(filmId)) {
-				favorites.push(filmId);
+			const alreadyExists = favorites.some((f) => f.id === filmId);
+			if (!alreadyExists) {
+				favorites.push({
+					id: filmId,
+					title: filmTitle,
+					year: filmYear,
+					poster: filmPoster,
+				});
 			}
 			localStorage.setItem('favorites', JSON.stringify(favorites));
 			setIsFavorited(true);
@@ -56,13 +65,20 @@ const FilmCard = ({ film }) => {
 
 	const handleToggleWatchlist = () => {
 		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+
 		if (isAdded) {
-			const updatedWatchlist = watchlist.filter((w) => w !== filmId);
+			const updatedWatchlist = watchlist.filter((w) => w.id !== filmId);
 			localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
 			setIsAdded(false);
 		} else {
-			if (!watchlist.includes(filmId)) {
-				watchlist.push(filmId);
+			const alreadyExists = watchlist.some((w) => w.id === filmId);
+			if (!alreadyExists) {
+				watchlist.push({
+					id: filmId,
+					title: filmTitle,
+					year: filmYear,
+					poster: filmPoster,
+				});
 			}
 			localStorage.setItem('watchlist', JSON.stringify(watchlist));
 			setIsAdded(true);
@@ -79,7 +95,12 @@ const FilmCard = ({ film }) => {
 	const handleJournalSubmit = () => {
 		const entries = JSON.parse(localStorage.getItem('journalEntries')) || [];
 		entries.push({
-			film,
+			film: {
+				id: filmId,
+				title: filmTitle,
+				year: filmYear,
+				poster: filmPoster,
+			},
 			title: journalTitle,
 			text: journalText,
 			date: new Date().toISOString(),
@@ -87,7 +108,6 @@ const FilmCard = ({ film }) => {
 		localStorage.setItem('journalEntries', JSON.stringify(entries));
 		handleCloseJournal();
 	};
-
 	return (
 		<Card
 			sx={{
