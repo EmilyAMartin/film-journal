@@ -6,6 +6,7 @@ import {
 	Grid,
 	IconButton,
 	Box,
+	CardMedia,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -59,67 +60,83 @@ const Journal = () => {
 						<h3 style={{ textAlign: 'center' }}>No journal entries yet.</h3>
 					</Box>
 				) : (
-					entries.map((entry, idx) => (
-						<Grid
-							item
-							xs={16}
-							sm={8}
-							md={5}
-							key={idx}
-							display='flex'
-							justifyContent='center'
-						>
-							<Card sx={{ maxWidth: 350, position: 'relative' }}>
-								<IconButton
-									aria-label='delete'
-									onClick={() => handleDelete(idx)}
-									sx={{
-										position: 'absolute',
-										top: 8,
-										right: 8,
-										zIndex: 1,
-										color: 'error.main',
-									}}
-								>
-									<DeleteIcon />
-								</IconButton>
-								<CardContent>
-									<Typography
-										variant='h6'
-										gutterBottom
-										sx={{ fontWeight: 700, textAlign: 'center' }}
-									>
-										{entry.title || 'Untitled Entry'}
-									</Typography>
-									<Typography
-										variant='caption'
+					entries.map((entry, idx) => {
+						const film = entry.film || {};
+						const poster = film.poster || '/src/Images/1.jpg'; // fallback image
+
+						return (
+							<Grid
+								item
+								xs={16}
+								sm={8}
+								md={5}
+								key={idx}
+								display='flex'
+								justifyContent='center'
+							>
+								<Card sx={{ maxWidth: 350, position: 'relative' }}>
+									<IconButton
+										aria-label='delete'
+										onClick={() => handleDelete(idx)}
 										sx={{
-											color: 'text.secondary',
-											mb: 1,
-											display: 'block',
-											textAlign: 'center',
+											position: 'absolute',
+											top: 8,
+											right: 8,
+											zIndex: 1,
+											color: 'error.main',
 										}}
 									>
-										{new Date(entry.date).toLocaleString()}
-									</Typography>
-									<Typography
-										variant='subtitle2'
-										sx={{ fontStyle: 'italic', mb: 1, textAlign: 'center' }}
-									>
-										{typeof entry.film === 'string'
-											? entry.film
-											: entry.film?.title || JSON.stringify(entry.film)}
-									</Typography>
-									<Typography
-										variant='body1'
-										sx={{ textAlign: 'center' }}
-									>
-										{entry.text}
-									</Typography>
-								</CardContent>
-							</Card>
-						</Grid>
-					))
+										<DeleteIcon />
+									</IconButton>
+
+									{/* 🎬 Film Poster */}
+									<CardMedia
+										component='img'
+										height='200'
+										image={poster}
+										alt={film.title || 'Film poster'}
+										sx={{ objectFit: 'cover' }}
+									/>
+
+									<CardContent>
+										<Typography
+											variant='h6'
+											gutterBottom
+											sx={{ fontWeight: 700, textAlign: 'center' }}
+										>
+											{entry.title || 'Untitled Entry'}
+										</Typography>
+
+										<Typography
+											variant='caption'
+											sx={{
+												color: 'text.secondary',
+												mb: 1,
+												display: 'block',
+												textAlign: 'center',
+											}}
+										>
+											{new Date(entry.date).toLocaleString()}
+										</Typography>
+
+										<Typography
+											variant='subtitle2'
+											sx={{ fontStyle: 'italic', mb: 1, textAlign: 'center' }}
+										>
+											{film.title || 'Untitled Film'}
+										</Typography>
+
+										<Typography
+											variant='body1'
+											sx={{ textAlign: 'center' }}
+										>
+											{entry.text}
+										</Typography>
+									</CardContent>
+								</Card>
+							</Grid>
+						);
+					})
 				)}
 			</Grid>
 		</div>
