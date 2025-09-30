@@ -7,24 +7,20 @@ import {
 	Card,
 	CardContent,
 	Dialog,
-	DialogTitle,
-	DialogContent,
 	IconButton,
 } from '@mui/material';
-import { searchMovies } from '../src/api/movieService';
+import { searchMovies, getMovieById } from '../src/api/movieService';
 import debounce from 'lodash.debounce';
-import FilmCard from './FilmCard'; // adjust path if needed
 import CloseIcon from '@mui/icons-material/Close';
+import FilmActions from './FilmActions';
 
 const FilmSearch = () => {
 	const [query, setQuery] = useState('');
 	const [results, setResults] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
-
 	const [selectedMovie, setSelectedMovie] = useState(null);
 	const [modalOpen, setModalOpen] = useState(false);
-
 	const handleSearch = debounce(async (searchTerm) => {
 		if (!searchTerm) {
 			setResults([]);
@@ -49,9 +45,14 @@ const FilmSearch = () => {
 		return () => handleSearch.cancel();
 	}, [query]);
 
-	const handleMovieClick = (movie) => {
-		setSelectedMovie(movie);
-		setModalOpen(true);
+	const handleMovieClick = async (movie) => {
+		try {
+			const fullMovie = await getMovieById(movie.imdbID);
+			setSelectedMovie(fullMovie);
+			setModalOpen(true);
+		} catch (err) {
+			console.error('Failed to fetch movie details:', err);
+		}
 	};
 
 	const handleCloseModal = () => {
@@ -79,6 +80,7 @@ const FilmSearch = () => {
 				</Typography>
 			)}
 
+			{/* Search Results */}
 			<Box sx={{ mt: 3 }}>
 				{results.map((movie) => (
 					<Card
@@ -103,7 +105,7 @@ const FilmSearch = () => {
 				))}
 			</Box>
 
-			{/* 🔍 Modal to display detailed info and actions */}
+			{/* Modal with Movie Details */}
 			<Dialog
 				open={modalOpen}
 				onClose={handleCloseModal}
@@ -118,83 +120,93 @@ const FilmSearch = () => {
 					},
 				}}
 			>
-				<Box
-					sx={{
-						display: 'flex',
-						position: 'relative',
-						flexDirection: { xs: 'column', sm: 'row' },
-					}}
-				>
-					{/* Close Button */}
-					<IconButton
-						onClick={handleCloseModal}
-						sx={{
-							position: 'absolute',
-							top: 8,
-							right: 8,
-							color: 'grey.500',
-							zIndex: 10,
-						}}
-					>
-						<CloseIcon />
-					</IconButton>
-
-					{/* Poster */}
+				{selectedMovie && (
 					<Box
 						sx={{
-							width: { xs: '100%', sm: 300 },
-							flexShrink: 0,
-							height: { xs: 300, sm: '100%' },
-							backgroundColor: 'black',
 							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
+							position: 'relative',
+							flexDirection: { xs: 'column', sm: 'row' },
 						}}
 					>
-						{selectedMovie?.Poster && selectedMovie.Poster !== 'N/A' ? (
-							<img
-								src={selectedMovie.Poster}
-								alt={`${selectedMovie.Title} Poster`}
-								style={{
-									width: '100%',
-									height: '100%',
-									objectFit: 'cover',
+						{/* Close Button */}
+						<IconButton
+							onClick={handleCloseModal}
+							sx={{
+								position: 'absolute',
+								top: 8,
+								right: 8,
+								color: 'grey.500',
+								zIndex: 10,
+							}}
+						>
+							<CloseIcon />
+						</IconButton>
+
+						{/* Poster Section */}
+						<Box
+							sx={{
+								width: { xs: '100%', sm: 300 },
+								flexShrink: 0,
+								height: { xs: 300, sm: '100%' },
+								backgroundColor: 'black',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
+						>
+							{selectedMovie.Poster && selectedMovie.Poster !== 'N/A' ? (
+								<img
+									src={selectedMovie.Poster}
+									alt={`${selectedMovie.Title} Poster`}
+									style={{
+										width: '100%',
+										height: '100%',
+										objectFit: 'cover',
+									}}
+								/>
+							) : (
+								<Typography color='white'>No Image</Typography>
+							)}
+						</Box>
+
+						{/* Details Section */}
+						<Box sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+							<Typography
+								variant='h5'
+								fontWeight='bold'
+								gutterBottom
+							>
+								{selectedMovie.Title} ({selectedMovie.Year})
+							</Typography>
+
+							<Typography
+								variant='subtitle2'
+								color='text.secondary'
+								gutterBottom
+							>
+								{selectedMovie.Genre} • {selectedMovie.Runtime} • Directed by{' '}
+								{selectedMovie.Director}
+							</Typography>
+
+							<Typography
+								variant='body1'
+								sx={{ mt: 2, mb: 2, flexGrow: 1, overflowY: 'auto' }}
+							>
+								{selectedMovie.Plot || 'No description available.'}
+							</Typography>
+
+							{/* Film Action Icons */}
+							<FilmActions
+								film={{
+									id: selectedMovie.imdbID,
+									title: selectedMovie.Title,
+									year: selectedMovie.Year,
+									poster: selectedMovie.Poster,
 								}}
 							/>
-						) : (
-							<Typography color='white'>No Image</Typography>
-						)}
+						</Box>
 					</Box>
-
-					{/* Movie Details */}
-					<Box sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-						<Typography
-							variant='h5'
-							fontWeight='bold'
-							gutterBottom
-						>
-							{selectedMovie?.Title} ({selectedMovie?.Year})
-						</Typography>
-
-						<Typography
-							variant='subtitle2'
-							color='text.secondary'
-							gutterBottom
-						>
-							{selectedMovie?.Genre} • {selectedMovie?.Runtime} • Directed by{' '}
-							{selectedMovie?.Director}
-						</Typography>
-
-						<Typography
-							variant='body1'
-							sx={{ mt: 2, mb: 2, flexGrow: 1, overflowY: 'auto' }}
-						>
-							{selectedMovie?.Plot || 'No description available.'}
-						</Typography>
-
-						{/* Actions */}
-					</Box>
-				</Box>
+				)}
 			</Dialog>
 		</Box>
 	);

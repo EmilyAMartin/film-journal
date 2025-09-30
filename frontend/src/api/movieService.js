@@ -6,7 +6,6 @@ const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 const getToday = () => new Date().toISOString().slice(0, 10);
 
-// Track daily request count in localStorage
 function incrementRequestCount() {
 	const today = getToday();
 	const stats = JSON.parse(localStorage.getItem('omdb_usage')) || {};
