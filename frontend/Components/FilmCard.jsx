@@ -18,6 +18,8 @@ import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
+import FilmActions from './FilmActions';
 
 const FilmCard = ({ film }) => {
 	const isFilmObj = film && typeof film === 'object';
@@ -26,12 +28,14 @@ const FilmCard = ({ film }) => {
 	const filmPoster =
 		isFilmObj && film.poster ? film.poster : '/src/Images/1.jpg';
 	const filmId = isFilmObj ? film.id || film.imdbID || film.title : film;
+	const filmDescription = isFilmObj && film.description ? film.description : '';
 
 	const [isFavorited, setIsFavorited] = React.useState(false);
 	const [isAdded, setIsAdded] = React.useState(false);
 	const [journalOpen, setJournalOpen] = React.useState(false);
 	const [journalText, setJournalText] = React.useState('');
 	const [journalTitle, setJournalTitle] = React.useState('');
+	const [detailOpen, setDetailOpen] = React.useState(false);
 
 	React.useEffect(() => {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -45,12 +49,11 @@ const FilmCard = ({ film }) => {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
 		if (isFavorited) {
-			const updatedFavorites = favorites.filter((f) => f.id !== filmId);
-			localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+			const updated = favorites.filter((f) => f.id !== filmId);
+			localStorage.setItem('favorites', JSON.stringify(updated));
 			setIsFavorited(false);
 		} else {
-			const alreadyExists = favorites.some((f) => f.id === filmId);
-			if (!alreadyExists) {
+			if (!favorites.some((f) => f.id === filmId)) {
 				favorites.push({
 					id: filmId,
 					title: filmTitle,
@@ -67,12 +70,11 @@ const FilmCard = ({ film }) => {
 		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
 
 		if (isAdded) {
-			const updatedWatchlist = watchlist.filter((w) => w.id !== filmId);
-			localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist));
+			const updated = watchlist.filter((w) => w.id !== filmId);
+			localStorage.setItem('watchlist', JSON.stringify(updated));
 			setIsAdded(false);
 		} else {
-			const alreadyExists = watchlist.some((w) => w.id === filmId);
-			if (!alreadyExists) {
+			if (!watchlist.some((w) => w.id === filmId)) {
 				watchlist.push({
 					id: filmId,
 					title: filmTitle,
@@ -91,16 +93,10 @@ const FilmCard = ({ film }) => {
 		setJournalText('');
 		setJournalTitle('');
 	};
-
 	const handleJournalSubmit = () => {
 		const entries = JSON.parse(localStorage.getItem('journalEntries')) || [];
 		entries.push({
-			film: {
-				id: filmId,
-				title: filmTitle,
-				year: filmYear,
-				poster: filmPoster,
-			},
+			film: { id: filmId, title: filmTitle, year: filmYear, poster: filmPoster },
 			title: journalTitle,
 			text: journalText,
 			date: new Date().toISOString(),
@@ -108,115 +104,125 @@ const FilmCard = ({ film }) => {
 		localStorage.setItem('journalEntries', JSON.stringify(entries));
 		handleCloseJournal();
 	};
+
 	return (
-		<Card
-			sx={{
-				width: 200,
-				maxWidth: '100%',
-				borderRadius: 4,
-				boxShadow: 6,
-				overflow: 'hidden',
-				transition: 'transform 0.2s, box-shadow 0.2s',
-				'&:hover': {
-					transform: 'translateY(-4px) scale(1.03)',
-					boxShadow: 12,
-				},
-				bgcolor: 'background.paper',
-				mx: 'auto',
-				marginBottom: 4,
-				marginTop: 2,
-			}}
-		>
-			<Box sx={{ position: 'relative' }}>
-				<CardMedia
-					component='img'
-					height={250}
-					image={filmPoster}
-					alt={filmTitle}
-					sx={{
-						objectFit: 'cover',
-						width: '100%',
-						height: 250,
-					}}
-				/>
-				<Box
-					sx={{
-						position: 'absolute',
-						bottom: 0,
-						left: 0,
-						width: '100%',
-						bgcolor: 'rgba(0,0,0,0.65)',
-						color: 'white',
-						px: 2,
-						py: 1,
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'flex-start',
-					}}
-				>
-					<Typography
-						variant='subtitle1'
-						fontWeight={700}
-						noWrap
-					>
-						{filmTitle}
-					</Typography>
-					{filmYear && (
-						<Typography
-							variant='caption'
-							sx={{ opacity: 0.8 }}
-						>
-							{filmYear}
-						</Typography>
-					)}
-				</Box>
-			</Box>
-			<Divider />
-			<CardActions
+		<>
+			<Card
 				sx={{
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-					px: 2,
-					py: 1.5,
-					bgcolor: 'background.default',
+					width: 200,
+					maxWidth: '100%',
+					borderRadius: 4,
+					boxShadow: 6,
+					overflow: 'hidden',
+					transition: 'transform 0.2s, box-shadow 0.2s',
+					'&:hover': {
+						transform: 'translateY(-4px) scale(1.03)',
+						boxShadow: 12,
+					},
+					bgcolor: 'background.paper',
+					mx: 'auto',
+					mb: 4,
+					mt: 2,
 				}}
 			>
-				<Box sx={{ display: 'flex', gap: 2 }}>
-					<Tooltip title={isAdded ? 'Remove from Watchlist' : 'Add to Watchlist'}>
-						<IconButton
-							onClick={handleToggleWatchlist}
-							aria-label='watchlist'
-							size='medium'
-							color={isAdded ? 'primary' : 'default'}
-						>
-							{isAdded ? <VisibilityIcon /> : <VisibilityOutlinedIcon />}
-						</IconButton>
-					</Tooltip>
-					<Tooltip
-						title={isFavorited ? 'Remove from Favorites' : 'Add to Favorites'}
+				<Box sx={{ position: 'relative' }}>
+					<Box
+						onClick={() => setDetailOpen(true)}
+						sx={{ cursor: 'pointer' }}
 					>
-						<IconButton
-							onClick={handleToggleFavorite}
-							aria-label='favorite'
-							size='medium'
-							color={isFavorited ? 'error' : 'default'}
+						<CardMedia
+							component='img'
+							height={250}
+							image={filmPoster}
+							alt={filmTitle}
+							sx={{
+								objectFit: 'cover',
+								width: '100%',
+								height: 250,
+							}}
+						/>
+					</Box>
+					<Box
+						sx={{
+							position: 'absolute',
+							bottom: 0,
+							left: 0,
+							width: '100%',
+							bgcolor: 'rgba(0,0,0,0.65)',
+							color: 'white',
+							px: 2,
+							py: 1,
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'flex-start',
+						}}
+					>
+						<Typography
+							variant='subtitle1'
+							fontWeight={700}
+							noWrap
 						>
-							{isFavorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-						</IconButton>
-					</Tooltip>
-					<Tooltip title='Add Journal Entry'>
-						<IconButton
-							onClick={handleOpenJournal}
-							aria-label='journal'
-							size='medium'
-							color='secondary'
-						>
-							<AddCircleOutlineIcon />
-						</IconButton>
-					</Tooltip>
+							{filmTitle}
+						</Typography>
+						{filmYear && (
+							<Typography
+								variant='caption'
+								sx={{ opacity: 0.8 }}
+							>
+								{filmYear}
+							</Typography>
+						)}
+					</Box>
 				</Box>
-			</CardActions>
+				<Divider />
+				<CardActions
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						px: 2,
+						py: 1.5,
+						bgcolor: 'background.default',
+					}}
+				>
+					<Box sx={{ display: 'flex', gap: 2 }}>
+						<Tooltip title={isAdded ? 'Remove from Watchlist' : 'Add to Watchlist'}>
+							<IconButton
+								onClick={handleToggleWatchlist}
+								aria-label='watchlist'
+								size='medium'
+								color={isAdded ? 'primary' : 'default'}
+							>
+								{isAdded ? <VisibilityIcon /> : <VisibilityOutlinedIcon />}
+							</IconButton>
+						</Tooltip>
+						<Tooltip
+							title={isFavorited ? 'Remove from Favorites' : 'Add to Favorites'}
+						>
+							<IconButton
+								onClick={handleToggleFavorite}
+								aria-label='favorite'
+								size='medium'
+								color={isFavorited ? 'error' : 'default'}
+							>
+								{isFavorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+							</IconButton>
+						</Tooltip>
+						<Tooltip title='Add Journal Entry'>
+							<IconButton
+								onClick={handleOpenJournal}
+								aria-label='journal'
+								size='medium'
+								color='secondary'
+							>
+								<AddCircleOutlineIcon />
+							</IconButton>
+						</Tooltip>
+					</Box>
+				</CardActions>
+			</Card>
+
+			{/* Journal Dialog */}
 			<Dialog
 				open={journalOpen}
 				onClose={handleCloseJournal}
@@ -245,7 +251,6 @@ const FilmCard = ({ film }) => {
 						autoFocus
 						margin='dense'
 						label='Journal Title'
-						type='text'
 						fullWidth
 						variant='outlined'
 						value={journalTitle}
@@ -254,7 +259,6 @@ const FilmCard = ({ film }) => {
 					<TextField
 						margin='dense'
 						label='Your thoughts'
-						type='text'
 						fullWidth
 						multiline
 						rows={5}
@@ -283,7 +287,114 @@ const FilmCard = ({ film }) => {
 					</Button>
 				</DialogActions>
 			</Dialog>
-		</Card>
+
+			<Dialog
+				open={detailOpen}
+				onClose={() => setDetailOpen(false)}
+				maxWidth='md'
+				fullWidth
+				PaperProps={{
+					sx: {
+						borderRadius: 4,
+						overflow: 'hidden',
+						bgcolor: 'background.paper',
+						boxShadow: 24,
+					},
+				}}
+			>
+				<Box
+					sx={{
+						display: 'flex',
+						position: 'relative',
+						flexDirection: { xs: 'column', sm: 'row' },
+					}}
+				>
+					{/* Close Button */}
+					<IconButton
+						onClick={() => setDetailOpen(false)}
+						sx={{
+							position: 'absolute',
+							top: 8,
+							right: 8,
+							color: 'grey.500',
+							zIndex: 10,
+						}}
+					>
+						<CloseIcon />
+					</IconButton>
+
+					{/* Poster Section */}
+					<Box
+						sx={{
+							width: { xs: '100%', sm: 300 },
+							flexShrink: 0,
+							height: { xs: 300, sm: '100%' },
+							backgroundColor: 'black',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						{filmPoster ? (
+							<Box
+								component='img'
+								src={filmPoster}
+								alt={`${filmTitle} Poster`}
+								sx={{
+									width: '100%',
+									height: '100%',
+									objectFit: 'cover',
+								}}
+							/>
+						) : (
+							<Typography color='white'>No Image</Typography>
+						)}
+					</Box>
+
+					{/* Details Section */}
+					<Box sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+						<Typography
+							variant='h5'
+							fontWeight='bold'
+							gutterBottom
+						>
+							{filmTitle} {filmYear && `(${filmYear})`}
+						</Typography>
+						{isFilmObj && (
+							<Typography
+								variant='subtitle2'
+								color='text.secondary'
+								gutterBottom
+							>
+								{film.genre ? film.genre : ''} {film.runtime ? `• ${film.runtime}` : ''}{' '}
+								{film.director ? `• Directed by ${film.director}` : ''}
+							</Typography>
+						)}
+
+						<Typography
+							variant='body1'
+							sx={{
+								mt: 2,
+								mb: 2,
+								flexGrow: 1,
+								overflowY: 'auto',
+							}}
+						>
+							{filmDescription || 'No description available.'}
+						</Typography>
+
+						<FilmActions
+							film={{
+								id: filmId,
+								title: filmTitle,
+								year: filmYear,
+								poster: filmPoster,
+							}}
+						/>
+					</Box>
+				</Box>
+			</Dialog>
+		</>
 	);
 };
 
