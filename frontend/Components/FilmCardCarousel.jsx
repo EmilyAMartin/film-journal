@@ -1,11 +1,46 @@
-// src/Components/FilmCardCarousel.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import FilmCard from './FilmCard';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { getMovieById } from '../src/api/movieService';
 
 const FilmCardCarousel = ({ films = [] }) => {
+	const [fullFilms, setFullFilms] = useState([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		if (films.length === 0) {
+			setFullFilms([]);
+			setLoading(false);
+			return;
+		}
+
+		const fetchFullDetails = async () => {
+			setLoading(true);
+			try {
+				const detailedFilms = await Promise.all(
+					films.map((film) => getMovieById(film.imdbID))
+				);
+				setFullFilms(detailedFilms);
+			} catch (err) {
+				console.error('Failed to fetch full movie details:', err);
+				setFullFilms(films);
+			}
+			setLoading(false);
+		};
+
+		fetchFullDetails();
+	}, [films]);
+
+	if (loading) {
+		return <div>Loading films...</div>;
+	}
+
+	if (!fullFilms || fullFilms.length === 0) {
+		return null;
+	}
+
 	const settings = {
 		dots: true,
 		infinite: false,
@@ -41,22 +76,12 @@ const FilmCardCarousel = ({ films = [] }) => {
 		],
 	};
 
-	// If no films, you could show a placeholder or nothing
-	if (!films || films.length === 0) {
-		return null;
-	}
-
 	return (
 		<Slider {...settings}>
-			{films.map((film) => (
+			{fullFilms.map((film) => (
 				<FilmCard
 					key={film.imdbID}
-					film={{
-						title: film.Title,
-						year: film.Year,
-						poster: film.Poster,
-						id: film.imdbID,
-					}}
+					film={film}
 				/>
 			))}
 		</Slider>

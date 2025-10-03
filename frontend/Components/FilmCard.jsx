@@ -23,12 +23,14 @@ import FilmActions from './FilmActions';
 
 const FilmCard = ({ film }) => {
 	const isFilmObj = film && typeof film === 'object';
-	const filmTitle = isFilmObj ? film.title || 'Untitled' : film || 'Untitled';
-	const filmYear = isFilmObj && film.year ? film.year : '';
-	const filmPoster =
-		isFilmObj && film.poster ? film.poster : '/src/Images/1.jpg';
-	const filmId = isFilmObj ? film.id || film.imdbID || film.title : film;
-	const filmDescription = isFilmObj && film.description ? film.description : '';
+	const filmTitle = film?.Title || film?.title || 'Untitled';
+	const filmYear = film?.Year || film?.year || '';
+	const filmPoster = film?.Poster || film?.poster || '/src/Images/1.jpg';
+	const filmDescription = film?.Plot || film?.description || '';
+	const filmGenre = film?.Genre || film?.genre || '';
+	const filmRuntime = film?.Runtime || film?.runtime || '';
+	const filmDirector = film?.Director || film?.director || '';
+	const filmId = film?.imdbID || film?.id || filmTitle;
 
 	const [isFavorited, setIsFavorited] = React.useState(false);
 	const [isAdded, setIsAdded] = React.useState(false);
@@ -288,6 +290,7 @@ const FilmCard = ({ film }) => {
 				</DialogActions>
 			</Dialog>
 
+			{/* Detail Dialog */}
 			<Dialog
 				open={detailOpen}
 				onClose={() => setDetailOpen(false)}
@@ -360,17 +363,15 @@ const FilmCard = ({ film }) => {
 						>
 							{filmTitle} {filmYear && `(${filmYear})`}
 						</Typography>
-						{isFilmObj && (
-							<Typography
-								variant='subtitle2'
-								color='text.secondary'
-								gutterBottom
-							>
-								{film.genre ? film.genre : ''} {film.runtime ? `• ${film.runtime}` : ''}{' '}
-								{film.director ? `• Directed by ${film.director}` : ''}
-							</Typography>
-						)}
-
+						<Typography
+							variant='subtitle2'
+							color='text.secondary'
+							gutterBottom
+						>
+							{filmGenre} {filmRuntime && `• ${filmRuntime}`}{' '}
+							{filmDirector && `• Directed by ${filmDirector}`}
+						</Typography>
+						<Divider sx={{ my: 1 }} />
 						<Typography
 							variant='body1'
 							sx={{
@@ -378,18 +379,14 @@ const FilmCard = ({ film }) => {
 								mb: 2,
 								flexGrow: 1,
 								overflowY: 'auto',
+								maxHeight: 300,
 							}}
 						>
 							{filmDescription || 'No description available.'}
 						</Typography>
-
 						<FilmActions
-							film={{
-								id: filmId,
-								title: filmTitle,
-								year: filmYear,
-								poster: filmPoster,
-							}}
+							filmId={filmId}
+							film={film}
 						/>
 					</Box>
 				</Box>

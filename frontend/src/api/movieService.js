@@ -2,7 +2,7 @@ const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 const BASE_URL = 'https://www.omdbapi.com/';
 
 const REQUEST_LIMIT = 1000;
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+const CACHE_DURATION = 24 * 60 * 60 * 1000;
 
 const getToday = () => new Date().toISOString().slice(0, 10);
 
@@ -26,7 +26,6 @@ function canMakeRequest() {
 	return stats.count === undefined || stats.count < REQUEST_LIMIT;
 }
 
-// --- Caching Helpers ---
 function getCached(key) {
 	const cache = JSON.parse(localStorage.getItem(key));
 	if (!cache) return null;
@@ -48,7 +47,6 @@ function setCached(key, data) {
 	localStorage.setItem(key, JSON.stringify(item));
 }
 
-// --- Search by Title ---
 export async function searchMovies(title) {
 	const cacheKey = `search_${title.toLowerCase()}`;
 	const cached = getCached(cacheKey);
@@ -73,7 +71,6 @@ export async function searchMovies(title) {
 	}
 }
 
-// --- Get full movie by ID ---
 export async function getMovieById(imdbID) {
 	const cacheKey = `movie_${imdbID}`;
 	const cached = getCached(cacheKey);
@@ -83,7 +80,7 @@ export async function getMovieById(imdbID) {
 		throw new Error('Daily request limit reached.');
 	}
 
-	const res = await fetch(`${BASE_URL}?apikey=${API_KEY}&i=${imdbID}`);
+	const res = await fetch(`${BASE_URL}?apikey=${API_KEY}&i=${imdbID}&plot=full`);
 	const data = await res.json();
 
 	incrementRequestCount();
@@ -96,7 +93,6 @@ export async function getMovieById(imdbID) {
 	}
 }
 
-// --- Get a list of popular movies ---
 export async function getPopularMovies() {
 	const cacheKey = `popular_movies`;
 	const cached = getCached(cacheKey);
@@ -126,7 +122,6 @@ export async function getPopularMovies() {
 		}
 	}
 
-	// Remove duplicates by imdbID
 	const uniqueResults = allResults.filter(
 		(movie, index, self) =>
 			index === self.findIndex((m) => m.imdbID === movie.imdbID)
