@@ -93,7 +93,6 @@ export async function getMovieById(imdbID) {
 	}
 }
 
-// Use IMDb IDs for precise results
 export async function getPopularMovies() {
 	const cacheKey = `popular_movies`;
 	const cached = getCached(cacheKey);
@@ -109,6 +108,9 @@ export async function getPopularMovies() {
 		'tt0109830', // Forrest Gump
 		'tt1375666', // Inception
 		'tt0137523', // Fight Club
+		'tt0120737', // The Lord of the Rings: The Fellowship of the Ring
+		'tt0167260', // The Lord of the Rings: The Return of the King
+		'tt0108052', // Schindler's List
 	];
 
 	const allResults = await Promise.all(popularIds.map((id) => getMovieById(id)));
@@ -129,9 +131,12 @@ export async function getTrendingMovies() {
 		'tt1745960', // Oppenheimer (2023)
 		'tt6791350', // Guardians of the Galaxy Vol. 3
 		'tt9362722', // Spider-Man: Across the Spider-Verse
-		'tt10638522', // The Creator
+		'tt1877830', // The Batman
 		'tt15239678', // Dune: Part Two
 		'tt10362466', // John Wick: Chapter 4
+		'tt1074638', // Skyfall
+		'tt4154796', // Avengers: Endgame
+		'tt4154756', // Avengers: Infinity War
 	];
 
 	const allResults = await Promise.all(
