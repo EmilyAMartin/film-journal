@@ -1,5 +1,7 @@
 import FilmSearch from '../Components/FilmSearch';
 import PopularFilms from '../Components/PopularFilms';
+import TrendingNow from '../Components/TrendingNow';
+
 import { Box, Stack } from '@mui/material';
 
 const Home = () => {
@@ -32,6 +34,7 @@ const Home = () => {
 				spacing={6}
 			>
 				<PopularFilms />
+				<TrendingNow />
 			</Stack>
 		</Box>
 	);

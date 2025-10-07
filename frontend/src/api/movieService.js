@@ -52,9 +52,7 @@ export async function searchMovies(title) {
 	const cached = getCached(cacheKey);
 	if (cached) return cached;
 
-	if (!canMakeRequest()) {
-		throw new Error('Daily request limit reached.');
-	}
+	if (!canMakeRequest()) return [];
 
 	const res = await fetch(
 		`${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(title)}`
@@ -67,7 +65,8 @@ export async function searchMovies(title) {
 		setCached(cacheKey, data.Search);
 		return data.Search;
 	} else {
-		throw new Error(data.Error || 'Movie not found');
+		setCached(cacheKey, []);
+		return [];
 	}
 }
 
@@ -76,11 +75,11 @@ export async function getMovieById(imdbID) {
 	const cached = getCached(cacheKey);
 	if (cached) return cached;
 
-	if (!canMakeRequest()) {
-		throw new Error('Daily request limit reached.');
-	}
+	if (!canMakeRequest()) return {};
 
-	const res = await fetch(`${BASE_URL}?apikey=${API_KEY}&i=${imdbID}&plot=full`);
+	const res = await fetch(
+		`${BASE_URL}?apikey=${API_KEY}&i=${encodeURIComponent(imdbID)}&plot=full`
+	);
 	const data = await res.json();
 
 	incrementRequestCount();
@@ -89,45 +88,56 @@ export async function getMovieById(imdbID) {
 		setCached(cacheKey, data);
 		return data;
 	} else {
-		throw new Error(data.Error || 'Movie not found');
+		setCached(cacheKey, {});
+		return {};
 	}
 }
 
+// Use IMDb IDs for precise results
 export async function getPopularMovies() {
 	const cacheKey = `popular_movies`;
 	const cached = getCached(cacheKey);
 	if (cached) return cached;
 
-	if (!canMakeRequest()) {
-		throw new Error('Daily request limit reached.');
-	}
+	if (!canMakeRequest()) return [];
 
-	const popularSearchTerms = [
-		'Avengers',
-		'Batman',
-		'Top Gun',
-		'Mission Impossible',
-		'Spider-Man',
+	const popularIds = [
+		'tt0111161', // The Shawshank Redemption
+		'tt0068646', // The Godfather
+		'tt0468569', // The Dark Knight
+		'tt0110912', // Pulp Fiction
+		'tt0109830', // Forrest Gump
+		'tt1375666', // Inception
+		'tt0137523', // Fight Club
 	];
-	const allResults = [];
 
-	for (const term of popularSearchTerms) {
-		try {
-			const results = await searchMovies(term);
-			if (Array.isArray(results)) {
-				allResults.push(...results);
-			}
-		} catch (err) {
-			console.warn(`Failed to fetch for term "${term}": ${err.message}`);
-		}
-	}
+	const allResults = await Promise.all(popularIds.map((id) => getMovieById(id)));
 
-	const uniqueResults = allResults.filter(
-		(movie, index, self) =>
-			index === self.findIndex((m) => m.imdbID === movie.imdbID)
+	setCached(cacheKey, allResults);
+	return allResults;
+}
+
+export async function getTrendingMovies() {
+	const cacheKey = `trending_movies`;
+	const cached = getCached(cacheKey);
+	if (cached) return cached;
+
+	if (!canMakeRequest()) return [];
+
+	const trendingIds = [
+		'tt1517268', // Barbie (2023)
+		'tt1745960', // Oppenheimer (2023)
+		'tt6791350', // Guardians of the Galaxy Vol. 3
+		'tt9362722', // Spider-Man: Across the Spider-Verse
+		'tt10638522', // The Creator
+		'tt15239678', // Dune: Part Two
+		'tt10362466', // John Wick: Chapter 4
+	];
+
+	const allResults = await Promise.all(
+		trendingIds.map((id) => getMovieById(id))
 	);
 
-	const finalResults = uniqueResults.slice(0, 20);
-	setCached(cacheKey, finalResults);
-	return finalResults;
+	setCached(cacheKey, allResults);
+	return allResults;
 }

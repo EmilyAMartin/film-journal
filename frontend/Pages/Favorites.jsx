@@ -2,29 +2,41 @@ import React, { useEffect, useState } from 'react';
 import FilmCard from '../Components/FilmCard';
 import Box from '@mui/material/Box';
 import { getFavorites } from '../storageService';
+import { getMovieById } from '../src/api/movieService';
 
 const Favorites = () => {
-	const [favorites, setFavorites] = useState(getFavorites());
+	const [favorites, setFavorites] = useState([]);
+	const [loading, setLoading] = useState(true);
+
+	const fetchDetails = async () => {
+		const stored = getFavorites();
+		const detailed = await Promise.all(
+			stored.map((film) => getMovieById(film.imdbID || film.id))
+		);
+		setFavorites(detailed);
+		setLoading(false);
+	};
 
 	useEffect(() => {
+		fetchDetails();
+		// Listen for localStorage changes
 		const handleStorage = (e) => {
 			if (e.key === 'favorites') {
-				setFavorites(getFavorites());
+				fetchDetails();
 			}
 		};
 		window.addEventListener('storage', handleStorage);
 		return () => window.removeEventListener('storage', handleStorage);
+		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			const current = getFavorites();
-			if (JSON.stringify(current) !== JSON.stringify(favorites)) {
-				setFavorites(current);
-			}
-		}, 500);
+			fetchDetails();
+		}, 1000);
 		return () => clearInterval(interval);
-	}, [favorites]);
+		// eslint-disable-next-line
+	}, []);
 
 	return (
 		<Box
@@ -36,24 +48,27 @@ const Favorites = () => {
 				minHeight: '60vh',
 			}}
 		>
-			{favorites.length === 0 && (
+			{loading ? (
+				<h3 style={{ textAlign: 'center' }}>Loading...</h3>
+			) : favorites.length === 0 ? (
 				<h3 style={{ textAlign: 'center' }}>No film added to favorites</h3>
+			) : (
+				<Box
+					sx={{
+						display: 'flex',
+						flexWrap: 'wrap',
+						justifyContent: 'center',
+						width: '100%',
+					}}
+				>
+					{favorites.map((film) => (
+						<FilmCard
+							key={film.imdbID}
+							film={film}
+						/>
+					))}
+				</Box>
 			)}
-			<Box
-				sx={{
-					display: 'flex',
-					flexWrap: 'wrap',
-					justifyContent: 'center',
-					width: '100%',
-				}}
-			>
-				{favorites.map((film) => (
-					<FilmCard
-						key={typeof film === 'object' ? JSON.stringify(film) : film}
-						film={film}
-					/>
-				))}
-			</Box>
 		</Box>
 	);
 };
