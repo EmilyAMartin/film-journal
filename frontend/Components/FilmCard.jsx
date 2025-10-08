@@ -1,14 +1,6 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
-import CardActions from '@mui/material/CardActions';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -18,11 +10,17 @@ import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
 import FilmActions from './FilmActions';
 
 const FilmCard = ({ film }) => {
-	const isFilmObj = film && typeof film === 'object';
 	const filmTitle = film?.Title || film?.title || 'Untitled';
 	const filmYear = film?.Year || film?.year || '';
 	const filmPoster = film?.Poster || film?.poster || '/src/Images/1.jpg';
@@ -125,103 +123,21 @@ const FilmCard = ({ film }) => {
 					mx: 'auto',
 					mb: 4,
 					mt: 2,
+					cursor: 'pointer',
 				}}
+				onClick={() => setDetailOpen(true)}
 			>
-				<Box sx={{ position: 'relative' }}>
-					<Box
-						onClick={() => setDetailOpen(true)}
-						sx={{ cursor: 'pointer' }}
-					>
-						<CardMedia
-							component='img'
-							height={250}
-							image={filmPoster}
-							alt={filmTitle}
-							sx={{
-								objectFit: 'cover',
-								width: '100%',
-								height: 250,
-							}}
-						/>
-					</Box>
-					<Box
-						sx={{
-							position: 'absolute',
-							bottom: 0,
-							left: 0,
-							width: '100%',
-							bgcolor: 'rgba(0,0,0,0.65)',
-							color: 'white',
-							px: 2,
-							py: 1,
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'flex-start',
-						}}
-					>
-						<Typography
-							variant='subtitle1'
-							fontWeight={700}
-							noWrap
-						>
-							{filmTitle}
-						</Typography>
-						{filmYear && (
-							<Typography
-								variant='caption'
-								sx={{ opacity: 0.8 }}
-							>
-								{filmYear}
-							</Typography>
-						)}
-					</Box>
-				</Box>
-				<Divider />
-				<CardActions
+				<CardMedia
+					component='img'
+					height={250}
+					image={filmPoster}
+					alt={filmTitle}
 					sx={{
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-						px: 2,
-						py: 1.5,
-						bgcolor: 'background.default',
+						objectFit: 'cover',
+						width: '100%',
+						height: 300,
 					}}
-				>
-					<Box sx={{ display: 'flex', gap: 2 }}>
-						<Tooltip title={isAdded ? 'Remove from Watchlist' : 'Add to Watchlist'}>
-							<IconButton
-								onClick={handleToggleWatchlist}
-								aria-label='watchlist'
-								size='medium'
-								color={isAdded ? 'primary' : 'default'}
-							>
-								{isAdded ? <VisibilityIcon /> : <VisibilityOutlinedIcon />}
-							</IconButton>
-						</Tooltip>
-						<Tooltip
-							title={isFavorited ? 'Remove from Favorites' : 'Add to Favorites'}
-						>
-							<IconButton
-								onClick={handleToggleFavorite}
-								aria-label='favorite'
-								size='medium'
-								color={isFavorited ? 'error' : 'default'}
-							>
-								{isFavorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-							</IconButton>
-						</Tooltip>
-						<Tooltip title='Add Journal Entry'>
-							<IconButton
-								onClick={handleOpenJournal}
-								aria-label='journal'
-								size='medium'
-								color='secondary'
-							>
-								<AddCircleOutlineIcon />
-							</IconButton>
-						</Tooltip>
-					</Box>
-				</CardActions>
+				/>
 			</Card>
 
 			{/* Journal Dialog */}
@@ -384,10 +300,40 @@ const FilmCard = ({ film }) => {
 						>
 							{filmDescription || 'No description available.'}
 						</Typography>
-						<FilmActions
-							filmId={filmId}
-							film={film}
-						/>
+						<Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+							<Tooltip title={isAdded ? 'Remove from Watchlist' : 'Add to Watchlist'}>
+								<IconButton
+									onClick={handleToggleWatchlist}
+									aria-label='watchlist'
+									size='medium'
+									color={isAdded ? 'primary' : 'default'}
+								>
+									{isAdded ? <VisibilityIcon /> : <VisibilityOutlinedIcon />}
+								</IconButton>
+							</Tooltip>
+							<Tooltip
+								title={isFavorited ? 'Remove from Favorites' : 'Add to Favorites'}
+							>
+								<IconButton
+									onClick={handleToggleFavorite}
+									aria-label='favorite'
+									size='medium'
+									color={isFavorited ? 'error' : 'default'}
+								>
+									{isFavorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+								</IconButton>
+							</Tooltip>
+							<Tooltip title='Add Journal Entry'>
+								<IconButton
+									onClick={handleOpenJournal}
+									aria-label='journal'
+									size='medium'
+									color='secondary'
+								>
+									<AddCircleOutlineIcon />
+								</IconButton>
+							</Tooltip>
+						</Box>
 					</Box>
 				</Box>
 			</Dialog>
