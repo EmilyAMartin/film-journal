@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Checkbox from '@mui/material/Checkbox';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const LoginBtn = () => {
 	const [open, setOpen] = useState(false);
@@ -74,14 +75,28 @@ const LoginBtn = () => {
 	}));
 	return (
 		<div>
-			<button
-				style={buttonStyle}
-				onMouseEnter={handleMouseEnter}
-				onMouseLeave={handleMouseLeave}
+			<Button
+				startIcon={<AccountCircleIcon />}
 				onClick={handleOpen}
+				variant='contained'
+				sx={{
+					borderRadius: 999,
+					px: 2.5,
+					py: 1,
+					fontWeight: 600,
+					fontSize: '1rem',
+					background: 'linear-gradient(90deg, #1976d2 0%, #64b5f6 100%)',
+					boxShadow: 2,
+					textTransform: 'none',
+					color: 'white',
+					'&:hover': {
+						background: 'linear-gradient(90deg, #1565c0 0%, #42a5f5 100%)',
+						boxShadow: 4,
+					},
+				}}
 			>
 				Login
-			</button>
+			</Button>
 
 			<Modal
 				open={open}

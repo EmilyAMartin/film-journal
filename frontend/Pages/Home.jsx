@@ -30,7 +30,7 @@ const Home = () => {
 			<Stack
 				className='film-section'
 				direction='column'
-				sx={{ m: 12.5 }}
+				sx={{ m: 8 }}
 				spacing={6}
 			>
 				<PopularFilms />

@@ -39,7 +39,7 @@ const Navbar = ({ toggleTheme, mode }) => {
 	};
 
 	return (
-		<Box sx={{ flexGrow: 1 }}>
+		<Box sx={{ flexGrow: 1, mt: 2 }}>
 			<AppBar
 				position='static'
 				color='transparent'
