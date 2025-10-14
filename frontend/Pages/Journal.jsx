@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import JournalEntryCard from '../Components/JournalEntryCard';
-import { getJournalEntries, setJournalEntries } from '../src/storageService';
+import { getJournalEntries } from '../storageService';
 const Journal = () => {
 	const [entries, setEntriesState] = useState([]);
 
 	useEffect(() => {
-		const fetchEntries = async () => {
-			const stored = await getJournalEntries();
-			setEntriesState(stored);
-		};
-		fetchEntries();
+		const stored = getJournalEntries();
+		setEntriesState(stored);
 	}, []);
 
-	const handleDelete = async (entryToDelete) => {
+	const handleDelete = (entryToDelete) => {
 		const updated = entries.filter((entry) => entry !== entryToDelete);
 		setEntriesState(updated);
-		await setJournalEntries(updated);
+		// Update localStorage directly
+		localStorage.setItem('journalEntries', JSON.stringify(updated));
 	};
 
 	return (
