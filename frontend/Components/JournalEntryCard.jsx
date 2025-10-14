@@ -66,7 +66,7 @@ const JournalEntryCard = ({ entry, onDelete }) => {
 						bgcolor: 'background.paper',
 						boxShadow: 24,
 						position: 'relative',
-						minHeight: 200, // ensures enough height for icon placement
+						minHeight: 200,
 					},
 				}}
 			>

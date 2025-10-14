@@ -9,7 +9,7 @@ const Watchlist = () => {
 	const [loading, setLoading] = useState(true);
 
 	const fetchDetails = async () => {
-		const stored = getWatchlist();
+		const stored = await getWatchlist();
 		const detailed = await Promise.all(
 			stored.map((film) => getMovieById(film.imdbID || film.id))
 		);
@@ -19,22 +19,10 @@ const Watchlist = () => {
 
 	useEffect(() => {
 		fetchDetails();
-		const handleStorage = (e) => {
-			if (e.key === 'watchlist') {
-				fetchDetails();
-			}
-		};
-		window.addEventListener('storage', handleStorage);
-		return () => window.removeEventListener('storage', handleStorage);
-		// eslint-disable-next-line
-	}, []);
-
-	useEffect(() => {
 		const interval = setInterval(() => {
 			fetchDetails();
 		}, 1000);
 		return () => clearInterval(interval);
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -62,7 +50,7 @@ const Watchlist = () => {
 				>
 					{watchlist.map((film) => (
 						<FilmCard
-							key={film.imdbID}
+							key={film.imdbID || film.id}
 							film={film}
 						/>
 					))}

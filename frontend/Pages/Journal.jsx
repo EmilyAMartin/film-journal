@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import JournalEntryCard from '../Components/JournalEntryCard';
-// Remove this line:
-// import AddNewEntryBtn from '../Components/AddNewEntryBtn';
 
 const Journal = () => {
 	const [entries, setEntries] = useState([]);
@@ -19,9 +17,6 @@ const Journal = () => {
 
 	return (
 		<div style={{ padding: '2rem' }}>
-			{/* Remove this line:
-            <AddNewEntryBtn onEntryAdded={handleEntryAdded} />
-            */}
 			<div
 				style={{
 					display: 'flex',
