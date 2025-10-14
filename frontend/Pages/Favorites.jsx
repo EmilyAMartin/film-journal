@@ -9,7 +9,7 @@ const Favorites = () => {
 	const [loading, setLoading] = useState(true);
 
 	const fetchDetails = async () => {
-		const stored = getFavorites();
+		const stored = await getFavorites();
 		const detailed = await Promise.all(
 			stored.map((film) => getMovieById(film.imdbID || film.id))
 		);
@@ -19,23 +19,11 @@ const Favorites = () => {
 
 	useEffect(() => {
 		fetchDetails();
-		// Listen for localStorage changes
-		const handleStorage = (e) => {
-			if (e.key === 'favorites') {
-				fetchDetails();
-			}
-		};
-		window.addEventListener('storage', handleStorage);
-		return () => window.removeEventListener('storage', handleStorage);
-		// eslint-disable-next-line
-	}, []);
-
-	useEffect(() => {
+		// Listen for localForage changes (polling)
 		const interval = setInterval(() => {
 			fetchDetails();
 		}, 1000);
 		return () => clearInterval(interval);
-		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -63,7 +51,7 @@ const Favorites = () => {
 				>
 					{favorites.map((film) => (
 						<FilmCard
-							key={film.imdbID}
+							key={film.imdbID || film.id}
 							film={film}
 						/>
 					))}

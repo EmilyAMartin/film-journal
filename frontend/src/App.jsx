@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Route, Routes } from 'react-router-dom';
@@ -8,6 +8,7 @@ import Journal from '../Pages/Journal';
 import Favorites from '../Pages/Favorites';
 import Watchlist from '../Pages/Watchlist';
 import Account from '../Pages/Account';
+import { register as registerServiceWorker } from './serviceWorkerRegistration';
 
 function App() {
 	const [mode, setMode] = useState('light');
@@ -20,6 +21,10 @@ function App() {
 	const toggleTheme = () => {
 		setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
 	};
+
+	useEffect(() => {
+		registerServiceWorker();
+	}, []);
 
 	return (
 		<ThemeProvider theme={theme}>
