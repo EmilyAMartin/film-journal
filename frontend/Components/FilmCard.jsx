@@ -19,6 +19,15 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import FilmActions from './FilmActions';
+import {
+	getFavorites,
+	addToFavorites,
+	removeFromFavorites,
+	getWatchlist,
+	addToWatchlist,
+	removeFromWatchlist,
+	addJournalEntry,
+} from '../src/storageService';
 
 const FilmCard = ({ film }) => {
 	const filmTitle = film?.Title || film?.title || 'Untitled';
@@ -38,52 +47,65 @@ const FilmCard = ({ film }) => {
 	const [detailOpen, setDetailOpen] = React.useState(false);
 
 	React.useEffect(() => {
-		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+		const checkStatus = async () => {
+			try {
+				const favorites = await getFavorites();
+				const watchlist = await getWatchlist();
 
-		setIsFavorited(favorites.some((f) => f.id === filmId));
-		setIsAdded(watchlist.some((w) => w.id === filmId));
+				setIsFavorited(favorites.some((f) => f.id === filmId));
+				setIsAdded(watchlist.some((w) => w.id === filmId));
+			} catch (error) {
+				console.error('Failed to check film status:', error);
+			}
+		};
+		checkStatus();
 	}, [filmId]);
 
-	const handleToggleFavorite = () => {
-		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-		if (isFavorited) {
-			const updated = favorites.filter((f) => f.id !== filmId);
-			localStorage.setItem('favorites', JSON.stringify(updated));
-			setIsFavorited(false);
-		} else {
-			if (!favorites.some((f) => f.id === filmId)) {
-				favorites.push({
+	const handleToggleFavorite = async () => {
+		try {
+			if (isFavorited) {
+				await removeFromFavorites({
 					id: filmId,
 					title: filmTitle,
 					year: filmYear,
 					poster: filmPoster,
 				});
+				setIsFavorited(false);
+			} else {
+				await addToFavorites({
+					id: filmId,
+					title: filmTitle,
+					year: filmYear,
+					poster: filmPoster,
+				});
+				setIsFavorited(true);
 			}
-			localStorage.setItem('favorites', JSON.stringify(favorites));
-			setIsFavorited(true);
+		} catch (error) {
+			console.error('Failed to toggle favorite:', error);
 		}
 	};
 
-	const handleToggleWatchlist = () => {
-		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
-
-		if (isAdded) {
-			const updated = watchlist.filter((w) => w.id !== filmId);
-			localStorage.setItem('watchlist', JSON.stringify(updated));
-			setIsAdded(false);
-		} else {
-			if (!watchlist.some((w) => w.id === filmId)) {
-				watchlist.push({
+	const handleToggleWatchlist = async () => {
+		try {
+			if (isAdded) {
+				await removeFromWatchlist({
 					id: filmId,
 					title: filmTitle,
 					year: filmYear,
 					poster: filmPoster,
 				});
+				setIsAdded(false);
+			} else {
+				await addToWatchlist({
+					id: filmId,
+					title: filmTitle,
+					year: filmYear,
+					poster: filmPoster,
+				});
+				setIsAdded(true);
 			}
-			localStorage.setItem('watchlist', JSON.stringify(watchlist));
-			setIsAdded(true);
+		} catch (error) {
+			console.error('Failed to toggle watchlist:', error);
 		}
 	};
 
@@ -93,16 +115,18 @@ const FilmCard = ({ film }) => {
 		setJournalText('');
 		setJournalTitle('');
 	};
-	const handleJournalSubmit = () => {
-		const entries = JSON.parse(localStorage.getItem('journalEntries')) || [];
-		entries.push({
-			film: { id: filmId, title: filmTitle, year: filmYear, poster: filmPoster },
-			title: journalTitle,
-			text: journalText,
-			date: new Date().toISOString(),
-		});
-		localStorage.setItem('journalEntries', JSON.stringify(entries));
-		handleCloseJournal();
+	const handleJournalSubmit = async () => {
+		try {
+			await addJournalEntry({
+				film: { id: filmId, title: filmTitle, year: filmYear, poster: filmPoster },
+				title: journalTitle,
+				text: journalText,
+				date: new Date().toISOString(),
+			});
+			handleCloseJournal();
+		} catch (error) {
+			console.error('Failed to add journal entry:', error);
+		}
 	};
 
 	return (

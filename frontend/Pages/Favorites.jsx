@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import FilmCard from '../Components/FilmCard';
 import Box from '@mui/material/Box';
-import { getFavorites } from '../storageService';
+import { getFavorites } from '../src/storageService';
 import { getMovieById } from '../src/api/movieService';
 
 const Favorites = () => {

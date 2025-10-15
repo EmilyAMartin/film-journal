@@ -1,20 +1,42 @@
 import { useState, useEffect } from 'react';
 import JournalEntryCard from '../Components/JournalEntryCard';
-import { getJournalEntries } from '../storageService';
+import { getJournalEntries, setJournalEntries } from '../src/storageService';
+
 const Journal = () => {
 	const [entries, setEntriesState] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		const stored = getJournalEntries();
-		setEntriesState(stored);
+		const loadEntries = async () => {
+			try {
+				const stored = await getJournalEntries();
+				setEntriesState(stored);
+			} catch (error) {
+				console.error('Failed to load journal entries:', error);
+			} finally {
+				setLoading(false);
+			}
+		};
+		loadEntries();
 	}, []);
 
-	const handleDelete = (entryToDelete) => {
-		const updated = entries.filter((entry) => entry !== entryToDelete);
-		setEntriesState(updated);
-		// Update localStorage directly
-		localStorage.setItem('journalEntries', JSON.stringify(updated));
+	const handleDelete = async (entryToDelete) => {
+		try {
+			const updated = entries.filter((entry) => entry !== entryToDelete);
+			setEntriesState(updated);
+			await setJournalEntries(updated);
+		} catch (error) {
+			console.error('Failed to delete journal entry:', error);
+		}
 	};
+
+	if (loading) {
+		return (
+			<div style={{ padding: '2rem', textAlign: 'center' }}>
+				<p>Loading journal entries...</p>
+			</div>
+		);
+	}
 
 	return (
 		<div style={{ padding: '2rem' }}>
