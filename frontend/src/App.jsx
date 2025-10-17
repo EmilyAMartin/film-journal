@@ -8,6 +8,8 @@ import Journal from '../Pages/Journal';
 import Favorites from '../Pages/Favorites';
 import Watchlist from '../Pages/Watchlist';
 import Account from '../Pages/Account';
+import OfflineIndicator from '../Components/OfflineIndicator';
+import InstallPrompt from '../Components/InstallPrompt';
 import { register as registerServiceWorker } from './serviceWorkerRegistration';
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<div className='App'>
+				<OfflineIndicator />
+				<InstallPrompt />
 				<Navbar
 					toggleTheme={toggleTheme}
 					mode={mode}

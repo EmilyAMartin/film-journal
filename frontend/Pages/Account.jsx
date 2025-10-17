@@ -2,206 +2,554 @@ import React, { useState } from 'react';
 import {
 	Box,
 	Typography,
-	Avatar,
 	Button,
 	TextField,
 	Grid,
 	Paper,
+	Alert,
+	Snackbar,
+	Divider,
+	Card,
+	CardContent,
+	CardActions,
+	IconButton,
+	Tooltip,
 } from '@mui/material';
-import UploadIcon from '@mui/icons-material/Upload';
+import {
+	Download as DownloadIcon,
+	Upload as UploadIcon,
+	Delete as DeleteIcon,
+	Info as InfoIcon,
+	Backup as BackupIcon,
+	Restore as RestoreIcon,
+} from '@mui/icons-material';
+import {
+	exportAllData,
+	importAllData,
+	clearAllData,
+} from '../src/storageService';
 
 const Account = () => {
-	const [user, setUser] = useState({
-		name: 'Jane Doe',
-		email: 'jane@example.com',
-		avatar: '/avatar.png',
+	const [snackbar, setSnackbar] = useState({
+		open: false,
+		message: '',
+		severity: 'info',
 	});
+	const [importFile, setImportFile] = useState(null);
+	const [showClearConfirm, setShowClearConfirm] = useState(false);
 
-	const [newEmail, setNewEmail] = useState(user.email);
-	const [currentPassword, setCurrentPassword] = useState('');
-	const [newPassword, setNewPassword] = useState('');
-	const [confirmPassword, setConfirmPassword] = useState('');
-	const [avatarFile, setAvatarFile] = useState(null);
+	const showSnackbar = (message, severity = 'info') => {
+		setSnackbar({ open: true, message, severity });
+	};
 
-	const handleAvatarChange = (e) => {
-		const file = e.target.files?.[0];
+	const handleExportData = async () => {
+		try {
+			const data = await exportAllData();
+			const blob = new Blob([JSON.stringify(data, null, 2)], {
+				type: 'application/json',
+			});
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `film-journal-backup-${
+				new Date().toISOString().split('T')[0]
+			}.json`;
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+			URL.revokeObjectURL(url);
+			showSnackbar('Data exported successfully!', 'success');
+		} catch (error) {
+			console.error('Export failed:', error);
+			showSnackbar('Export failed. Please try again.', 'error');
+		}
+	};
+
+	const handleImportFile = (event) => {
+		const file = event.target.files?.[0];
 		if (file) {
-			setAvatarFile(file);
-			const preview = URL.createObjectURL(file);
-			setUser((prev) => ({ ...prev, avatar: preview }));
-			// Backend Check Task: Upload avatar to backend
+			setImportFile(file);
 		}
 	};
 
-	const handleEmailChange = () => {
-		// Backend Check Task: Add validation and backend integration
-		setUser((prev) => ({ ...prev, email: newEmail }));
-		alert('Email updated!');
+	const handleImportData = async () => {
+		if (!importFile) return;
+
+		try {
+			const text = await importFile.text();
+			const data = JSON.parse(text);
+
+			// Validate the data structure
+			if (!data.journalEntries || !data.favorites || !data.watchlist) {
+				showSnackbar('Invalid backup file format.', 'error');
+				return;
+			}
+
+			const success = await importAllData(data);
+			if (success) {
+				showSnackbar(
+					'Data imported successfully! Please refresh the page.',
+					'success'
+				);
+				setImportFile(null);
+				// Reset file input
+				const fileInput = document.getElementById('import-file');
+				if (fileInput) fileInput.value = '';
+			} else {
+				showSnackbar('Import failed. Please try again.', 'error');
+			}
+		} catch (error) {
+			console.error('Import failed:', error);
+			showSnackbar('Invalid file format or corrupted data.', 'error');
+		}
 	};
 
-	const handlePasswordChange = () => {
-		if (newPassword !== confirmPassword) {
-			alert("Passwords don't match.");
-			return;
+	const handleClearData = async () => {
+		try {
+			await clearAllData();
+			showSnackbar('All data cleared successfully!', 'success');
+			setShowClearConfirm(false);
+			// Refresh the page to reflect changes
+			setTimeout(() => window.location.reload(), 1000);
+		} catch (error) {
+			console.error('Clear data failed:', error);
+			showSnackbar('Failed to clear data. Please try again.', 'error');
 		}
-
-		// Backend Check Task: Call backend to update password
-		alert('Password updated!');
-		setCurrentPassword('');
-		setNewPassword('');
-		setConfirmPassword('');
 	};
 
 	return (
-		<Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 700, mx: 'auto' }}>
-			<Typography
-				variant='h4'
-				fontWeight={600}
-				gutterBottom
+		<Box
+			sx={{
+				background: '#fafafa',
+				minHeight: '100vh',
+				py: 4,
+			}}
+		>
+			<Box
+				sx={{
+					maxWidth: 800,
+					mx: 'auto',
+					px: { xs: 2, md: 4 },
+				}}
 			>
-				Account Settings
-			</Typography>
+				{/* Header Section */}
+				<Box sx={{ textAlign: 'center', mb: 6 }}>
+					<Typography
+						variant='h3'
+						fontWeight={600}
+						gutterBottom
+						sx={{
+							color: '#1a1a1a',
+							mb: 2,
+						}}
+					>
+						Settings
+					</Typography>
+					<Typography
+						variant='body1'
+						sx={{
+							color: '#666',
+							maxWidth: 500,
+							mx: 'auto',
+						}}
+					>
+						Manage your film journal data with backup and restore tools
+					</Typography>
+				</Box>
 
-			{/* Profile Section */}
-			<Paper
-				elevation={2}
-				sx={{ p: 3, mb: 4, borderRadius: 3 }}
-			>
-				<Typography
-					variant='h6'
-					fontWeight={500}
-					gutterBottom
+				{/* Info Card */}
+				<Card
+					sx={{
+						mb: 4,
+						background: 'white',
+						border: '1px solid #e0e0e0',
+						borderRadius: 2,
+						boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+					}}
 				>
-					Profile
-				</Typography>
+					<CardContent sx={{ p: 3 }}>
+						<Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+							<InfoIcon sx={{ mr: 2, fontSize: 24, color: '#ff6b35' }} />
+							<Typography
+								variant='h6'
+								fontWeight={600}
+								sx={{ color: '#1a1a1a' }}
+							>
+								Local-First App
+							</Typography>
+						</Box>
+						<Typography
+							variant='body2'
+							sx={{ color: '#666' }}
+						>
+							Your film journal data is stored locally on your device. Use the tools
+							below to backup, restore, or manage your data.
+						</Typography>
+					</CardContent>
+				</Card>
+
 				<Grid
 					container
-					spacing={2}
-					alignItems='center'
+					spacing={4}
 				>
-					<Grid item>
-						<Avatar
-							src={user.avatar}
-							alt={user.name}
-							sx={{ width: 80, height: 80 }}
-						/>
-					</Grid>
-					<Grid item>
-						<Button
-							variant='contained'
-							component='label'
-							startIcon={<UploadIcon />}
+					{/* Export Data */}
+					<Grid
+						item
+						xs={12}
+						md={6}
+					>
+						<Card
 							sx={{
-								textTransform: 'none',
+								height: '100%',
+								background: 'white',
+								border: '1px solid #e0e0e0',
 								borderRadius: 2,
-								fontWeight: 500,
-								backgroundColor: '#f57c00',
+								boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+								transition: 'all 0.2s ease',
 								'&:hover': {
-									backgroundColor: '#ef6c00',
+									boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
 								},
 							}}
 						>
-							Update Profile Picture
-							<input
-								hidden
-								accept='image/*'
-								type='file'
-								onChange={handleAvatarChange}
-							/>
-						</Button>
+							<CardContent sx={{ p: 3 }}>
+								<Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+									<Box
+										sx={{
+											p: 1.5,
+											borderRadius: 2,
+											background: '#ff6b35',
+											mr: 2,
+										}}
+									>
+										<BackupIcon sx={{ color: 'white', fontSize: 20 }} />
+									</Box>
+									<Typography
+										variant='h6'
+										fontWeight={600}
+										sx={{ color: '#1a1a1a' }}
+									>
+										Export Data
+									</Typography>
+								</Box>
+								<Typography
+									variant='body2'
+									sx={{
+										mb: 2,
+										color: '#666',
+										lineHeight: 1.5,
+									}}
+								>
+									Download a backup of all your journal entries, favorites, and
+									watchlist.
+								</Typography>
+								<Box
+									sx={{
+										background: '#f5f5f5',
+										p: 2,
+										borderRadius: 1,
+										mb: 2,
+									}}
+								>
+									<Typography
+										variant='caption'
+										sx={{ color: '#666', fontWeight: 500 }}
+									>
+										Includes: Journal entries, Favorites, Watchlist
+									</Typography>
+								</Box>
+							</CardContent>
+							<CardActions sx={{ p: 3, pt: 0 }}>
+								<Button
+									variant='contained'
+									startIcon={<DownloadIcon />}
+									onClick={handleExportData}
+									fullWidth
+									sx={{
+										borderRadius: 2,
+										py: 1.5,
+										fontWeight: 600,
+										background: '#ff6b35',
+										'&:hover': {
+											background: '#e55a2b',
+										},
+									}}
+								>
+									Export Backup
+								</Button>
+							</CardActions>
+						</Card>
+					</Grid>
+
+					{/* Import Data */}
+					<Grid
+						item
+						xs={12}
+						md={6}
+					>
+						<Card
+							sx={{
+								height: '100%',
+								background: 'white',
+								border: '1px solid #e0e0e0',
+								borderRadius: 2,
+								boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+								transition: 'all 0.2s ease',
+								'&:hover': {
+									boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+								},
+							}}
+						>
+							<CardContent sx={{ p: 3 }}>
+								<Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+									<Box
+										sx={{
+											p: 1.5,
+											borderRadius: 2,
+											background: '#ff6b35',
+											mr: 2,
+										}}
+									>
+										<RestoreIcon sx={{ color: 'white', fontSize: 20 }} />
+									</Box>
+									<Typography
+										variant='h6'
+										fontWeight={600}
+										sx={{ color: '#1a1a1a' }}
+									>
+										Import Data
+									</Typography>
+								</Box>
+								<Typography
+									variant='body2'
+									sx={{
+										mb: 2,
+										color: '#666',
+										lineHeight: 1.5,
+									}}
+								>
+									Restore your data from a previously exported backup file.
+								</Typography>
+								<TextField
+									type='file'
+									accept='.json'
+									onChange={handleImportFile}
+									sx={{ display: 'none' }}
+									id='import-file'
+								/>
+								<Box
+									sx={{
+										background: '#f5f5f5',
+										p: 2,
+										borderRadius: 1,
+										mb: 2,
+									}}
+								>
+									<Typography
+										variant='caption'
+										sx={{
+											color: importFile ? '#ff6b35' : '#999',
+											fontWeight: 500,
+											fontStyle: importFile ? 'normal' : 'italic',
+										}}
+									>
+										{importFile ? `Selected: ${importFile.name}` : 'No file selected'}
+									</Typography>
+								</Box>
+							</CardContent>
+							<CardActions sx={{ p: 3, pt: 0, gap: 1 }}>
+								<Button
+									variant='outlined'
+									component='label'
+									startIcon={<UploadIcon />}
+									sx={{
+										flex: 1,
+										borderRadius: 2,
+										py: 1.5,
+										fontWeight: 600,
+										borderColor: '#ff6b35',
+										color: '#ff6b35',
+										'&:hover': {
+											borderColor: '#e55a2b',
+											backgroundColor: 'rgba(255, 107, 53, 0.1)',
+										},
+									}}
+								>
+									Choose File
+									<input
+										hidden
+										type='file'
+										accept='.json'
+										onChange={handleImportFile}
+										id='import-file'
+									/>
+								</Button>
+								<Button
+									variant='contained'
+									onClick={handleImportData}
+									disabled={!importFile}
+									sx={{
+										flex: 1,
+										borderRadius: 2,
+										py: 1.5,
+										fontWeight: 600,
+										background: '#ff6b35',
+										'&:hover': {
+											background: '#e55a2b',
+										},
+										'&:disabled': {
+											background: '#ccc',
+											color: '#999',
+										},
+									}}
+								>
+									Import
+								</Button>
+							</CardActions>
+						</Card>
+					</Grid>
+
+					{/* Clear Data */}
+					<Grid
+						item
+						xs={12}
+					>
+						<Card
+							sx={{
+								background: 'white',
+								border: '2px solid #ff6b35',
+								borderRadius: 2,
+								boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+								transition: 'all 0.2s ease',
+								'&:hover': {
+									boxShadow: '0 4px 16px rgba(255, 107, 53, 0.2)',
+								},
+							}}
+						>
+							<CardContent sx={{ p: 3 }}>
+								<Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+									<Box
+										sx={{
+											p: 1.5,
+											borderRadius: 2,
+											background: '#ff6b35',
+											mr: 2,
+										}}
+									>
+										<DeleteIcon sx={{ color: 'white', fontSize: 20 }} />
+									</Box>
+									<Typography
+										variant='h6'
+										fontWeight={600}
+										sx={{ color: '#d32f2f' }}
+									>
+										Danger Zone
+									</Typography>
+								</Box>
+								<Typography
+									variant='body2'
+									sx={{
+										mb: 2,
+										color: '#666',
+										lineHeight: 1.5,
+									}}
+								>
+									Permanently delete all your journal entries, favorites, and watchlist.
+									This action cannot be undone.
+								</Typography>
+								{showClearConfirm && (
+									<Alert
+										severity='warning'
+										sx={{
+											mb: 2,
+											borderRadius: 2,
+										}}
+									>
+										Are you sure you want to delete all data? This cannot be undone!
+									</Alert>
+								)}
+							</CardContent>
+							<CardActions sx={{ p: 3, pt: 0, gap: 1 }}>
+								{!showClearConfirm ? (
+									<Button
+										variant='outlined'
+										startIcon={<DeleteIcon />}
+										onClick={() => setShowClearConfirm(true)}
+										sx={{
+											borderRadius: 2,
+											py: 1.5,
+											fontWeight: 600,
+											borderColor: '#ff6b35',
+											color: '#ff6b35',
+											'&:hover': {
+												borderColor: '#e55a2b',
+												backgroundColor: 'rgba(255, 107, 53, 0.1)',
+											},
+										}}
+									>
+										Clear All Data
+									</Button>
+								) : (
+									<>
+										<Button
+											variant='outlined'
+											onClick={() => setShowClearConfirm(false)}
+											sx={{
+												flex: 1,
+												borderRadius: 2,
+												py: 1.5,
+												fontWeight: 600,
+												borderColor: '#666',
+												color: '#666',
+												'&:hover': {
+													borderColor: '#333',
+													backgroundColor: 'rgba(102, 102, 102, 0.1)',
+												},
+											}}
+										>
+											Cancel
+										</Button>
+										<Button
+											variant='contained'
+											onClick={handleClearData}
+											sx={{
+												flex: 1,
+												borderRadius: 2,
+												py: 1.5,
+												fontWeight: 600,
+												background: '#ff6b35',
+												'&:hover': {
+													background: '#e55a2b',
+												},
+											}}
+										>
+											Yes, Delete Everything
+										</Button>
+									</>
+								)}
+							</CardActions>
+						</Card>
 					</Grid>
 				</Grid>
-			</Paper>
 
-			{/* Update Email */}
-			<Paper
-				elevation={2}
-				sx={{ p: 3, mb: 4, borderRadius: 3 }}
-			>
-				<Typography
-					variant='h6'
-					fontWeight={500}
-					gutterBottom
+				{/* Snackbar for notifications */}
+				<Snackbar
+					open={snackbar.open}
+					autoHideDuration={4000}
+					onClose={() => setSnackbar({ ...snackbar, open: false })}
+					anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
 				>
-					Update Email
-				</Typography>
-				<TextField
-					label='New Email'
-					type='email'
-					fullWidth
-					sx={{ mt: 2, mb: 2 }}
-					value={newEmail}
-					onChange={(e) => setNewEmail(e.target.value)}
-				/>
-				<Button
-					variant='contained'
-					onClick={handleEmailChange}
-					sx={{
-						textTransform: 'none',
-						borderRadius: 2,
-						fontWeight: 500,
-						backgroundColor: '#f57c00',
-						'&:hover': {
-							backgroundColor: '#ef6c00',
-						},
-					}}
-				>
-					Update Email
-				</Button>
-			</Paper>
-
-			{/* Change Password */}
-			<Paper
-				elevation={2}
-				sx={{ p: 3, borderRadius: 3 }}
-			>
-				<Typography
-					variant='h6'
-					fontWeight={500}
-					gutterBottom
-				>
-					Change Password
-				</Typography>
-				<TextField
-					label='Current Password'
-					type='password'
-					fullWidth
-					sx={{ mt: 2 }}
-					value={currentPassword}
-					onChange={(e) => setCurrentPassword(e.target.value)}
-				/>
-				<TextField
-					label='New Password'
-					type='password'
-					fullWidth
-					sx={{ mt: 2 }}
-					value={newPassword}
-					onChange={(e) => setNewPassword(e.target.value)}
-				/>
-				<TextField
-					label='Confirm New Password'
-					type='password'
-					fullWidth
-					sx={{ mt: 2, mb: 2 }}
-					value={confirmPassword}
-					onChange={(e) => setConfirmPassword(e.target.value)}
-				/>
-				<Button
-					variant='contained'
-					onClick={handlePasswordChange}
-					sx={{
-						textTransform: 'none',
-						borderRadius: 2,
-						fontWeight: 500,
-						backgroundColor: '#f57c00',
-						'&:hover': {
-							backgroundColor: '#ef6c00',
-						},
-					}}
-				>
-					Update Password
-				</Button>
-			</Paper>
+					<Alert
+						severity={snackbar.severity}
+						onClose={() => setSnackbar({ ...snackbar, open: false })}
+						sx={{
+							borderRadius: 2,
+							fontWeight: 500,
+						}}
+					>
+						{snackbar.message}
+					</Alert>
+				</Snackbar>
+			</Box>
 		</Box>
 	);
 };

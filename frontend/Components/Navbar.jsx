@@ -8,17 +8,16 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import TheaterComedyOutlinedIcon from '@mui/icons-material/TheaterComedyOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
+import SettingsIcon from '@mui/icons-material/Settings';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { NavLink, useNavigate } from 'react-router-dom';
-import LoginBtn from './LoginBtn';
 
 const navLinks = [
 	{ to: '/', label: 'Films' },
 	{ to: '/Journal', label: 'Journal' },
 	{ to: '/Favorites', label: 'Favorites' },
 	{ to: '/Watchlist', label: 'Watchlist' },
-	{ to: '/Account', label: 'Account' },
 ];
 
 const Navbar = ({ toggleTheme, mode }) => {
@@ -98,9 +97,21 @@ const Navbar = ({ toggleTheme, mode }) => {
 						))}
 					</Box>
 					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 2 }}>
-						<LoginBtn />
 						<IconButton
-							sx={{ ml: 2 }}
+							component={NavLink}
+							to='/Account'
+							color='inherit'
+							aria-label='settings'
+							sx={{
+								'&.active': {
+									color: 'primary.main',
+								},
+							}}
+						>
+							<SettingsIcon />
+						</IconButton>
+						<IconButton
+							sx={{ ml: 1 }}
 							onClick={toggleTheme}
 							color='inherit'
 							aria-label='toggle dark mode'
@@ -142,6 +153,12 @@ const Navbar = ({ toggleTheme, mode }) => {
 						{link.label}
 					</MenuItem>
 				))}
+				<MenuItem
+					onClick={() => handleMenuClick('/Account')}
+					selected={window.location.pathname === '/Account'}
+				>
+					Settings
+				</MenuItem>
 			</Menu>
 		</Box>
 	);
