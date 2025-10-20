@@ -22,12 +22,14 @@ import {
 	Info as InfoIcon,
 	Backup as BackupIcon,
 	Restore as RestoreIcon,
+	Logout as LogoutIcon,
 } from '@mui/icons-material';
 import {
 	exportAllData,
 	importAllData,
 	clearAllData,
 } from '../src/storageService';
+import { useAccessControl } from '../src/hooks/useAccessControl';
 
 const Account = () => {
 	const [snackbar, setSnackbar] = useState({
@@ -37,6 +39,7 @@ const Account = () => {
 	});
 	const [importFile, setImportFile] = useState(null);
 	const [showClearConfirm, setShowClearConfirm] = useState(false);
+	const { revokeAccess } = useAccessControl();
 
 	const showSnackbar = (message, severity = 'info') => {
 		setSnackbar({ open: true, message, severity });
@@ -115,6 +118,14 @@ const Account = () => {
 			console.error('Clear data failed:', error);
 			showSnackbar('Failed to clear data. Please try again.', 'error');
 		}
+	};
+
+	const handleLogout = () => {
+		revokeAccess();
+		showSnackbar(
+			'Logged out successfully. You will need to enter the access code again.',
+			'info'
+		);
 	};
 
 	return (
@@ -526,6 +537,79 @@ const Account = () => {
 										</Button>
 									</>
 								)}
+							</CardActions>
+						</Card>
+					</Grid>
+
+					{/* Access Control */}
+					<Grid
+						item
+						xs={12}
+					>
+						<Card
+							sx={{
+								background: 'white',
+								border: '1px solid #e0e0e0',
+								borderRadius: 2,
+								boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+								transition: 'all 0.2s ease',
+								'&:hover': {
+									boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+								},
+							}}
+						>
+							<CardContent sx={{ p: 3 }}>
+								<Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+									<Box
+										sx={{
+											p: 1.5,
+											borderRadius: 2,
+											background: '#ff6b35',
+											mr: 2,
+										}}
+									>
+										<LogoutIcon sx={{ color: 'white', fontSize: 20 }} />
+									</Box>
+									<Typography
+										variant='h6'
+										fontWeight={600}
+										sx={{ color: '#1a1a1a' }}
+									>
+										Access Control
+									</Typography>
+								</Box>
+								<Typography
+									variant='body2'
+									sx={{
+										mb: 2,
+										color: '#666',
+										lineHeight: 1.5,
+									}}
+								>
+									Log out to require the access code again. This will protect your app
+									from unauthorized use.
+								</Typography>
+							</CardContent>
+							<CardActions sx={{ p: 3, pt: 0 }}>
+								<Button
+									variant='outlined'
+									startIcon={<LogoutIcon />}
+									onClick={handleLogout}
+									fullWidth
+									sx={{
+										borderRadius: 2,
+										py: 1.5,
+										fontWeight: 600,
+										borderColor: '#ff6b35',
+										color: '#ff6b35',
+										'&:hover': {
+											borderColor: '#e55a2b',
+											backgroundColor: 'rgba(255, 107, 53, 0.1)',
+										},
+									}}
+								>
+									Log Out
+								</Button>
 							</CardActions>
 						</Card>
 					</Grid>

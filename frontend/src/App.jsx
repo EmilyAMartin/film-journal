@@ -10,10 +10,14 @@ import Watchlist from '../Pages/Watchlist';
 import Account from '../Pages/Account';
 import OfflineIndicator from '../Components/OfflineIndicator';
 import InstallPrompt from '../Components/InstallPrompt';
-import { register as registerServiceWorker } from './serviceWorkerRegistration';
+import AccessControl from '../src/components/AccessControl';
+import { useAccessControl } from '../src/hooks/useAccessControl';
+import { register as registerServiceWorker } from '../src/serviceWorkerRegistration';
 
 function App() {
 	const [mode, setMode] = useState('light');
+	const { hasAccess, isChecking, grantAccess } = useAccessControl();
+
 	const theme = createTheme({
 		palette: {
 			mode,
@@ -27,6 +31,35 @@ function App() {
 	useEffect(() => {
 		registerServiceWorker();
 	}, []);
+
+	// Show loading while checking access
+	if (isChecking) {
+		return (
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						height: '100vh',
+					}}
+				>
+					<div>Loading...</div>
+				</div>
+			</ThemeProvider>
+		);
+	}
+
+	// Show access control if user doesn't have access
+	if (!hasAccess) {
+		return (
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				<AccessControl onAccessGranted={grantAccess} />
+			</ThemeProvider>
+		);
+	}
 
 	return (
 		<ThemeProvider theme={theme}>
