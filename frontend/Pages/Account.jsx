@@ -8,12 +8,9 @@ import {
 	Paper,
 	Alert,
 	Snackbar,
-	Divider,
 	Card,
 	CardContent,
 	CardActions,
-	IconButton,
-	Tooltip,
 } from '@mui/material';
 import {
 	Download as DownloadIcon,
@@ -30,8 +27,10 @@ import {
 	clearAllData,
 } from '../src/storageService';
 import { useAccessControl } from '../src/hooks/useAccessControl';
+import { useTheme } from '@mui/material/styles';
 
 const Account = () => {
+	const theme = useTheme();
 	const [snackbar, setSnackbar] = useState({
 		open: false,
 		message: '',
@@ -70,19 +69,15 @@ const Account = () => {
 
 	const handleImportFile = (event) => {
 		const file = event.target.files?.[0];
-		if (file) {
-			setImportFile(file);
-		}
+		if (file) setImportFile(file);
 	};
 
 	const handleImportData = async () => {
 		if (!importFile) return;
-
 		try {
 			const text = await importFile.text();
 			const data = JSON.parse(text);
 
-			// Validate the data structure
 			if (!data.journalEntries || !data.favorites || !data.watchlist) {
 				showSnackbar('Invalid backup file format.', 'error');
 				return;
@@ -95,7 +90,6 @@ const Account = () => {
 					'success'
 				);
 				setImportFile(null);
-				// Reset file input
 				const fileInput = document.getElementById('import-file');
 				if (fileInput) fileInput.value = '';
 			} else {
@@ -112,7 +106,6 @@ const Account = () => {
 			await clearAllData();
 			showSnackbar('All data cleared successfully!', 'success');
 			setShowClearConfirm(false);
-			// Refresh the page to reflect changes
 			setTimeout(() => window.location.reload(), 1000);
 		} catch (error) {
 			console.error('Clear data failed:', error);
@@ -131,7 +124,8 @@ const Account = () => {
 	return (
 		<Box
 			sx={{
-				background: '#fafafa',
+				backgroundColor: theme.palette.background.default,
+				color: theme.palette.text.primary,
 				minHeight: '100vh',
 				py: 4,
 			}}
@@ -143,23 +137,20 @@ const Account = () => {
 					px: { xs: 2, md: 4 },
 				}}
 			>
-				{/* Header Section */}
+				{/* Header */}
 				<Box sx={{ textAlign: 'center', mb: 6 }}>
 					<Typography
 						variant='h3'
 						fontWeight={600}
 						gutterBottom
-						sx={{
-							color: '#1a1a1a',
-							mb: 2,
-						}}
+						sx={{ color: theme.palette.text.primary, mb: 2 }}
 					>
 						Settings
 					</Typography>
 					<Typography
 						variant='body1'
 						sx={{
-							color: '#666',
+							color: theme.palette.text.secondary,
 							maxWidth: 500,
 							mx: 'auto',
 						}}
@@ -172,10 +163,10 @@ const Account = () => {
 				<Card
 					sx={{
 						mb: 4,
-						background: 'white',
-						border: '1px solid #e0e0e0',
+						backgroundColor: theme.palette.background.paper,
+						border: `1px solid ${theme.palette.divider}`,
 						borderRadius: 2,
-						boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+						boxShadow: theme.shadows[3],
 					}}
 				>
 					<CardContent sx={{ p: 3 }}>
@@ -184,14 +175,13 @@ const Account = () => {
 							<Typography
 								variant='h6'
 								fontWeight={600}
-								sx={{ color: '#1a1a1a' }}
 							>
 								Local-First App
 							</Typography>
 						</Box>
 						<Typography
 							variant='body2'
-							sx={{ color: '#666' }}
+							sx={{ color: theme.palette.text.secondary }}
 						>
 							Your film journal data is stored locally on your device. Use the tools
 							below to backup, restore, or manage your data.
@@ -212,14 +202,12 @@ const Account = () => {
 						<Card
 							sx={{
 								height: '100%',
-								background: 'white',
-								border: '1px solid #e0e0e0',
+								backgroundColor: theme.palette.background.paper,
+								border: `1px solid ${theme.palette.divider}`,
 								borderRadius: 2,
-								boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+								boxShadow: theme.shadows[3],
 								transition: 'all 0.2s ease',
-								'&:hover': {
-									boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
-								},
+								'&:hover': { boxShadow: theme.shadows[6] },
 							}}
 						>
 							<CardContent sx={{ p: 3 }}>
@@ -237,25 +225,20 @@ const Account = () => {
 									<Typography
 										variant='h6'
 										fontWeight={600}
-										sx={{ color: '#1a1a1a' }}
 									>
 										Export Data
 									</Typography>
 								</Box>
 								<Typography
 									variant='body2'
-									sx={{
-										mb: 2,
-										color: '#666',
-										lineHeight: 1.5,
-									}}
+									sx={{ mb: 2, color: theme.palette.text.secondary }}
 								>
 									Download a backup of all your journal entries, favorites, and
 									watchlist.
 								</Typography>
 								<Box
 									sx={{
-										background: '#f5f5f5',
+										backgroundColor: theme.palette.action.hover,
 										p: 2,
 										borderRadius: 1,
 										mb: 2,
@@ -263,7 +246,7 @@ const Account = () => {
 								>
 									<Typography
 										variant='caption'
-										sx={{ color: '#666', fontWeight: 500 }}
+										sx={{ color: theme.palette.text.secondary, fontWeight: 500 }}
 									>
 										Includes: Journal entries, Favorites, Watchlist
 									</Typography>
@@ -280,9 +263,7 @@ const Account = () => {
 										py: 1.5,
 										fontWeight: 600,
 										background: '#ff6b35',
-										'&:hover': {
-											background: '#e55a2b',
-										},
+										'&:hover': { background: '#e55a2b' },
 									}}
 								>
 									Export Backup
@@ -300,14 +281,12 @@ const Account = () => {
 						<Card
 							sx={{
 								height: '100%',
-								background: 'white',
-								border: '1px solid #e0e0e0',
+								backgroundColor: theme.palette.background.paper,
+								border: `1px solid ${theme.palette.divider}`,
 								borderRadius: 2,
-								boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+								boxShadow: theme.shadows[3],
 								transition: 'all 0.2s ease',
-								'&:hover': {
-									boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
-								},
+								'&:hover': { boxShadow: theme.shadows[6] },
 							}}
 						>
 							<CardContent sx={{ p: 3 }}>
@@ -325,18 +304,13 @@ const Account = () => {
 									<Typography
 										variant='h6'
 										fontWeight={600}
-										sx={{ color: '#1a1a1a' }}
 									>
 										Import Data
 									</Typography>
 								</Box>
 								<Typography
 									variant='body2'
-									sx={{
-										mb: 2,
-										color: '#666',
-										lineHeight: 1.5,
-									}}
+									sx={{ mb: 2, color: theme.palette.text.secondary }}
 								>
 									Restore your data from a previously exported backup file.
 								</Typography>
@@ -349,7 +323,7 @@ const Account = () => {
 								/>
 								<Box
 									sx={{
-										background: '#f5f5f5',
+										backgroundColor: theme.palette.action.hover,
 										p: 2,
 										borderRadius: 1,
 										mb: 2,
@@ -358,7 +332,7 @@ const Account = () => {
 									<Typography
 										variant='caption'
 										sx={{
-											color: importFile ? '#ff6b35' : '#999',
+											color: importFile ? '#ff6b35' : theme.palette.text.secondary,
 											fontWeight: 500,
 											fontStyle: importFile ? 'normal' : 'italic',
 										}}
@@ -381,7 +355,7 @@ const Account = () => {
 										color: '#ff6b35',
 										'&:hover': {
 											borderColor: '#e55a2b',
-											backgroundColor: 'rgba(255, 107, 53, 0.1)',
+											backgroundColor: 'rgba(255,107,53,0.1)',
 										},
 									}}
 								>
@@ -391,7 +365,6 @@ const Account = () => {
 										type='file'
 										accept='.json'
 										onChange={handleImportFile}
-										id='import-file'
 									/>
 								</Button>
 								<Button
@@ -404,12 +377,10 @@ const Account = () => {
 										py: 1.5,
 										fontWeight: 600,
 										background: '#ff6b35',
-										'&:hover': {
-											background: '#e55a2b',
-										},
+										'&:hover': { background: '#e55a2b' },
 										'&:disabled': {
-											background: '#ccc',
-											color: '#999',
+											background: theme.palette.action.disabledBackground,
+											color: theme.palette.text.disabled,
 										},
 									}}
 								>
@@ -426,14 +397,10 @@ const Account = () => {
 					>
 						<Card
 							sx={{
-								background: 'white',
-								border: '2px solid #ff6b35',
+								backgroundColor: theme.palette.background.paper,
+								border: `2px solid #ff6b35`,
 								borderRadius: 2,
-								boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-								transition: 'all 0.2s ease',
-								'&:hover': {
-									boxShadow: '0 4px 16px rgba(255, 107, 53, 0.2)',
-								},
+								boxShadow: theme.shadows[3],
 							}}
 						>
 							<CardContent sx={{ p: 3 }}>
@@ -458,11 +425,7 @@ const Account = () => {
 								</Box>
 								<Typography
 									variant='body2'
-									sx={{
-										mb: 2,
-										color: '#666',
-										lineHeight: 1.5,
-									}}
+									sx={{ color: theme.palette.text.secondary, mb: 2 }}
 								>
 									Permanently delete all your journal entries, favorites, and watchlist.
 									This action cannot be undone.
@@ -470,10 +433,7 @@ const Account = () => {
 								{showClearConfirm && (
 									<Alert
 										severity='warning'
-										sx={{
-											mb: 2,
-											borderRadius: 2,
-										}}
+										sx={{ mb: 2, borderRadius: 2 }}
 									>
 										Are you sure you want to delete all data? This cannot be undone!
 									</Alert>
@@ -493,7 +453,7 @@ const Account = () => {
 											color: '#ff6b35',
 											'&:hover': {
 												borderColor: '#e55a2b',
-												backgroundColor: 'rgba(255, 107, 53, 0.1)',
+												backgroundColor: 'rgba(255,107,53,0.1)',
 											},
 										}}
 									>
@@ -509,11 +469,11 @@ const Account = () => {
 												borderRadius: 2,
 												py: 1.5,
 												fontWeight: 600,
-												borderColor: '#666',
-												color: '#666',
+												borderColor: theme.palette.text.secondary,
+												color: theme.palette.text.secondary,
 												'&:hover': {
-													borderColor: '#333',
-													backgroundColor: 'rgba(102, 102, 102, 0.1)',
+													borderColor: theme.palette.text.primary,
+													backgroundColor: theme.palette.action.hover,
 												},
 											}}
 										>
@@ -528,9 +488,7 @@ const Account = () => {
 												py: 1.5,
 												fontWeight: 600,
 												background: '#ff6b35',
-												'&:hover': {
-													background: '#e55a2b',
-												},
+												'&:hover': { background: '#e55a2b' },
 											}}
 										>
 											Yes, Delete Everything
@@ -548,14 +506,10 @@ const Account = () => {
 					>
 						<Card
 							sx={{
-								background: 'white',
-								border: '1px solid #e0e0e0',
+								backgroundColor: theme.palette.background.paper,
+								border: `1px solid ${theme.palette.divider}`,
 								borderRadius: 2,
-								boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-								transition: 'all 0.2s ease',
-								'&:hover': {
-									boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
-								},
+								boxShadow: theme.shadows[3],
 							}}
 						>
 							<CardContent sx={{ p: 3 }}>
@@ -573,18 +527,13 @@ const Account = () => {
 									<Typography
 										variant='h6'
 										fontWeight={600}
-										sx={{ color: '#1a1a1a' }}
 									>
 										Access Control
 									</Typography>
 								</Box>
 								<Typography
 									variant='body2'
-									sx={{
-										mb: 2,
-										color: '#666',
-										lineHeight: 1.5,
-									}}
+									sx={{ color: theme.palette.text.secondary, mb: 2 }}
 								>
 									Log out to require the access code again. This will protect your app
 									from unauthorized use.
@@ -604,7 +553,7 @@ const Account = () => {
 										color: '#ff6b35',
 										'&:hover': {
 											borderColor: '#e55a2b',
-											backgroundColor: 'rgba(255, 107, 53, 0.1)',
+											backgroundColor: 'rgba(255,107,53,0.1)',
 										},
 									}}
 								>
@@ -615,7 +564,7 @@ const Account = () => {
 					</Grid>
 				</Grid>
 
-				{/* Snackbar for notifications */}
+				{/* Snackbar */}
 				<Snackbar
 					open={snackbar.open}
 					autoHideDuration={4000}
@@ -625,10 +574,7 @@ const Account = () => {
 					<Alert
 						severity={snackbar.severity}
 						onClose={() => setSnackbar({ ...snackbar, open: false })}
-						sx={{
-							borderRadius: 2,
-							fontWeight: 500,
-						}}
+						sx={{ borderRadius: 2, fontWeight: 500 }}
 					>
 						{snackbar.message}
 					</Alert>

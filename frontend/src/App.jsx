@@ -32,7 +32,6 @@ function App() {
 		registerServiceWorker();
 	}, []);
 
-	// Show loading while checking access
 	if (isChecking) {
 		return (
 			<ThemeProvider theme={theme}>
@@ -51,7 +50,6 @@ function App() {
 		);
 	}
 
-	// Show access control if user doesn't have access
 	if (!hasAccess) {
 		return (
 			<ThemeProvider theme={theme}>

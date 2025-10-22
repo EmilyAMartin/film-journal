@@ -8,7 +8,6 @@ export const useOnlineStatus = () => {
 		const handleOnline = () => {
 			setIsOnline(true);
 			setWasOffline(true);
-			// Reset the wasOffline flag after a short delay
 			setTimeout(() => setWasOffline(false), 3000);
 		};
 

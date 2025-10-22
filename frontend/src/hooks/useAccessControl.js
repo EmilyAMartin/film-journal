@@ -5,7 +5,6 @@ export const useAccessControl = () => {
 	const [isChecking, setIsChecking] = useState(true);
 
 	useEffect(() => {
-		// Check if user has access
 		const checkAccess = () => {
 			const access = localStorage.getItem('film_journal_access');
 			setHasAccess(access === 'true');
@@ -22,7 +21,6 @@ export const useAccessControl = () => {
 	const revokeAccess = () => {
 		localStorage.removeItem('film_journal_access');
 		setHasAccess(false);
-		// Reload the page to reset the app state
 		window.location.reload();
 	};
 

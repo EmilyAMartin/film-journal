@@ -6,21 +6,16 @@ export const usePWAInstall = () => {
 	const [isInstalled, setIsInstalled] = useState(false);
 
 	useEffect(() => {
-		// Check if app is already installed
 		if (window.matchMedia('(display-mode: standalone)').matches) {
 			setIsInstalled(true);
 		}
 
-		// Listen for the beforeinstallprompt event
 		const handleBeforeInstallPrompt = (e) => {
-			// Prevent the mini-infobar from appearing on mobile
 			e.preventDefault();
-			// Stash the event so it can be triggered later
 			setDeferredPrompt(e);
 			setIsInstallable(true);
 		};
 
-		// Listen for the appinstalled event
 		const handleAppInstalled = () => {
 			setIsInstalled(true);
 			setIsInstallable(false);
@@ -40,10 +35,7 @@ export const usePWAInstall = () => {
 		if (!deferredPrompt) return false;
 
 		try {
-			// Show the install prompt
 			deferredPrompt.prompt();
-
-			// Wait for the user to respond to the prompt
 			const { outcome } = await deferredPrompt.userChoice;
 
 			if (outcome === 'accepted') {

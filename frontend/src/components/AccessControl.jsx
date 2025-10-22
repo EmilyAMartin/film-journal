@@ -15,13 +15,9 @@ const AccessControl = ({ onAccessGranted }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [attempts, setAttempts] = useState(0);
-
-	// Get the access code from environment variables
-	const VALID_ACCESS_CODE =
-		import.meta.env.VITE_ACCESS_CODE || 'filmjournal2024';
+	const VALID_ACCESS_CODE = import.meta.env.VITE_ACCESS_CODE;
 
 	useEffect(() => {
-		// Check if user already has access
 		const hasAccess = localStorage.getItem('film_journal_access');
 		if (hasAccess === 'true') {
 			onAccessGranted();
@@ -33,7 +29,6 @@ const AccessControl = ({ onAccessGranted }) => {
 		setIsLoading(true);
 		setError('');
 
-		// Simulate a small delay for better UX
 		await new Promise((resolve) => setTimeout(resolve, 500));
 
 		if (accessCode === VALID_ACCESS_CODE) {
