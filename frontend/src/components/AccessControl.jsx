@@ -32,7 +32,6 @@ const AccessControl = ({ onAccessGranted }) => {
 		await new Promise((resolve) => setTimeout(resolve, 500));
 
 		if (accessCode === VALID_ACCESS_CODE) {
-			// Grant access
 			localStorage.setItem('film_journal_access', 'true');
 			onAccessGranted();
 		} else {
@@ -56,31 +55,42 @@ const AccessControl = ({ onAccessGranted }) => {
 				justifyContent: 'center',
 				alignItems: 'center',
 				minHeight: '100vh',
-				background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+				background: `
+          linear-gradient(120deg, #ff6b35 0%, #fca365 40%, #ffe0c3 100%)
+        `,
 				padding: 2,
 			}}
 		>
 			<Paper
-				elevation={10}
+				elevation={8}
 				sx={{
 					p: 4,
 					maxWidth: 400,
 					width: '100%',
 					textAlign: 'center',
+					borderRadius: 3,
+					backgroundColor: 'rgba(255, 255, 255, 0.9)',
+					backdropFilter: 'blur(10px)',
+					boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
 				}}
 			>
-				<LockIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+				<LockIcon sx={{ fontSize: 48, color: '#ff6b35', mb: 2 }} />
+
 				<Typography
 					variant='h4'
 					component='h1'
 					gutterBottom
+					sx={{ fontWeight: 700, color: '#222' }}
 				>
 					Film Journal
 				</Typography>
+
 				<Typography
 					variant='body1'
-					color='text.secondary'
-					sx={{ mb: 3 }}
+					sx={{
+						mb: 3,
+						color: '#555',
+					}}
 				>
 					Enter your access code to continue
 				</Typography>
@@ -93,8 +103,15 @@ const AccessControl = ({ onAccessGranted }) => {
 						value={accessCode}
 						onChange={(e) => setAccessCode(e.target.value)}
 						disabled={isLoading}
-						sx={{ mb: 2 }}
 						required
+						sx={{
+							mb: 2,
+							'& .MuiOutlinedInput-root': {
+								'& fieldset': { borderColor: '#ff6b35' },
+								'&:hover fieldset': { borderColor: '#fca365' },
+								'&.Mui-focused fieldset': { borderColor: '#ff6b35' },
+							},
+						}}
 					/>
 
 					{error && (
@@ -112,7 +129,22 @@ const AccessControl = ({ onAccessGranted }) => {
 						variant='contained'
 						size='large'
 						disabled={isLoading || !accessCode.trim()}
-						sx={{ mb: 2 }}
+						sx={{
+							mb: 2,
+							borderRadius: 2,
+							py: 1.2,
+							fontWeight: 600,
+							background: 'linear-gradient(90deg, #ff6b35 0%, #f57c4c 100%)',
+							boxShadow: '0 3px 10px rgba(255,107,53,0.3)',
+							'&:hover': {
+								background: 'linear-gradient(90deg, #f56b35 0%, #ff8755 100%)',
+								boxShadow: '0 4px 14px rgba(255,107,53,0.4)',
+							},
+							'&:disabled': {
+								background: 'rgba(255,107,53,0.4)',
+								color: '#fff',
+							},
+						}}
 					>
 						{isLoading ? (
 							<CircularProgress
@@ -127,7 +159,11 @@ const AccessControl = ({ onAccessGranted }) => {
 
 				<Typography
 					variant='caption'
-					color='text.secondary'
+					sx={{
+						color: '#777',
+						display: 'block',
+						mt: 1,
+					}}
 				>
 					Need access? Contact the administrator.
 				</Typography>

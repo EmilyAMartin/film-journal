@@ -230,7 +230,7 @@ const FilmCard = ({ film }) => {
 				</DialogActions>
 			</Dialog>
 
-			{/* Detail Dialog */}
+			{/* 🎞️ Film Details Dialog */}
 			<Dialog
 				open={detailOpen}
 				onClose={() => setDetailOpen(false)}
@@ -250,6 +250,8 @@ const FilmCard = ({ film }) => {
 						display: 'flex',
 						position: 'relative',
 						flexDirection: { xs: 'column', sm: 'row' },
+						alignItems: 'stretch',
+						width: '100%',
 					}}
 				>
 					{/* Close Button */}
@@ -266,16 +268,15 @@ const FilmCard = ({ film }) => {
 						<CloseIcon />
 					</IconButton>
 
-					{/* Poster Section */}
+					{/* ✅ Poster Section (Equal Width) */}
 					<Box
 						sx={{
-							width: { xs: '100%', sm: 300 },
-							flexShrink: 0,
-							height: { xs: 300, sm: '100%' },
+							width: { xs: '100%', sm: '50%' },
 							backgroundColor: 'black',
 							display: 'flex',
 							alignItems: 'center',
 							justifyContent: 'center',
+							overflow: 'hidden',
 						}}
 					>
 						{filmPoster ? (
@@ -285,8 +286,10 @@ const FilmCard = ({ film }) => {
 								alt={`${filmTitle} Poster`}
 								sx={{
 									width: '100%',
-									height: '100%',
-									objectFit: 'cover',
+									height: 'auto',
+									maxHeight: { xs: '50vh', sm: '80vh' },
+									objectFit: { xs: 'contain', sm: 'cover' },
+									display: 'block',
 								}}
 							/>
 						) : (
@@ -294,36 +297,55 @@ const FilmCard = ({ film }) => {
 						)}
 					</Box>
 
-					{/* Details Section */}
-					<Box sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-						<Typography
-							variant='h5'
-							fontWeight='bold'
-							gutterBottom
-						>
-							{filmTitle} {filmYear && `(${filmYear})`}
-						</Typography>
-						<Typography
-							variant='subtitle2'
-							color='text.secondary'
-							gutterBottom
-						>
-							{filmGenre} {filmRuntime && `• ${filmRuntime}`}{' '}
-							{filmDirector && `• Directed by ${filmDirector}`}
-						</Typography>
-						<Divider sx={{ my: 1 }} />
-						<Typography
-							variant='body1'
-							sx={{
-								mt: 2,
-								mb: 2,
-								flexGrow: 1,
-								overflowY: 'auto',
-								maxHeight: 300,
-							}}
-						>
-							{filmDescription || 'No description available.'}
-						</Typography>
+					{/* ✅ Details Section (Equal Width + scrollable) */}
+					<Box
+						sx={{
+							width: { xs: '100%', sm: '50%' },
+							p: { xs: 2, sm: 3 },
+							display: 'flex',
+							flexDirection: 'column',
+							justifyContent: 'space-between',
+							maxHeight: { xs: '40vh', sm: '80vh' },
+							overflowY: 'auto',
+						}}
+					>
+						<Box>
+							<Typography
+								variant='h6'
+								fontWeight='bold'
+								gutterBottom
+								sx={{ fontSize: { xs: 18, sm: 22 } }}
+							>
+								{filmTitle} {filmYear && `(${filmYear})`}
+							</Typography>
+
+							<Typography
+								variant='subtitle2'
+								color='text.secondary'
+								gutterBottom
+								sx={{ fontSize: { xs: 13, sm: 14 } }}
+							>
+								{filmGenre} {filmRuntime && `• ${filmRuntime}`}{' '}
+								{filmDirector && `• Directed by ${filmDirector}`}
+							</Typography>
+
+							<Divider sx={{ my: 1 }} />
+
+							<Typography
+								variant='body2'
+								sx={{
+									mt: 1,
+									mb: 2,
+									flexGrow: 1,
+									overflowY: 'auto',
+									fontSize: { xs: 13, sm: 15 },
+								}}
+							>
+								{filmDescription || 'No description available.'}
+							</Typography>
+						</Box>
+
+						{/* Buttons */}
 						<Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
 							<Tooltip title={isAdded ? 'Remove from Watchlist' : 'Add to Watchlist'}>
 								<IconButton
@@ -335,6 +357,7 @@ const FilmCard = ({ film }) => {
 									{isAdded ? <VisibilityIcon /> : <VisibilityOutlinedIcon />}
 								</IconButton>
 							</Tooltip>
+
 							<Tooltip
 								title={isFavorited ? 'Remove from Favorites' : 'Add to Favorites'}
 							>
@@ -347,6 +370,7 @@ const FilmCard = ({ film }) => {
 									{isFavorited ? <FavoriteIcon /> : <FavoriteBorderIcon />}
 								</IconButton>
 							</Tooltip>
+
 							<Tooltip title='Add Journal Entry'>
 								<IconButton
 									onClick={handleOpenJournal}
