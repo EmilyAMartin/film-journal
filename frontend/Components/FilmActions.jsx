@@ -159,8 +159,13 @@ const FilmActions = ({ film }) => {
 						onChange={(e) => setJournalText(e.target.value)}
 					/>
 				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleCloseJournal}>Cancel</Button>
+				<DialogActions sx={{ gap: 1 }}>
+					<Button
+						onClick={handleCloseJournal}
+						variant='outlined'
+					>
+						Cancel
+					</Button>
 					<Button
 						onClick={handleJournalSubmit}
 						variant='contained'

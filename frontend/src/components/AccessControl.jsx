@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
 	Box,
 	Paper,
@@ -7,10 +7,12 @@ import {
 	Typography,
 	Alert,
 	CircularProgress,
+	useTheme,
 } from '@mui/material';
 import { Lock as LockIcon } from '@mui/icons-material';
 
 const AccessControl = ({ onAccessGranted }) => {
+	const theme = useTheme();
 	const [accessCode, setAccessCode] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
@@ -55,9 +57,7 @@ const AccessControl = ({ onAccessGranted }) => {
 				justifyContent: 'center',
 				alignItems: 'center',
 				minHeight: '100vh',
-				background: `
-          linear-gradient(120deg, #00D9FF 0%, #14B8A6 40%, #1a1a1a 100%)
-        `,
+				background: `linear-gradient(120deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 40%, ${theme.palette.background.default} 100%)`,
 				padding: 2,
 			}}
 		>
@@ -74,7 +74,7 @@ const AccessControl = ({ onAccessGranted }) => {
 					boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
 				}}
 			>
-				<LockIcon sx={{ fontSize: 48, color: '#00D9FF', mb: 2 }} />
+				<LockIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
 
 				<Typography
 					variant='h4'
@@ -107,9 +107,9 @@ const AccessControl = ({ onAccessGranted }) => {
 						sx={{
 							mb: 2,
 							'& .MuiOutlinedInput-root': {
-								'& fieldset': { borderColor: '#00D9FF' },
-								'&:hover fieldset': { borderColor: '#33E0FF' },
-								'&.Mui-focused fieldset': { borderColor: '#00D9FF' },
+								'& fieldset': { borderColor: 'primary.main' },
+								'&:hover fieldset': { borderColor: 'primary.light' },
+								'&.Mui-focused fieldset': { borderColor: 'primary.main' },
 							},
 						}}
 					/>
@@ -131,18 +131,19 @@ const AccessControl = ({ onAccessGranted }) => {
 						disabled={isLoading || !accessCode.trim()}
 						sx={{
 							mb: 2,
-							borderRadius: 2,
-							py: 1.2,
+							py: 1.4,
 							fontWeight: 600,
-							background: 'linear-gradient(90deg, #00D9FF 0%, #14B8A6 100%)',
-							boxShadow: '0 3px 10px rgba(0,217,255,0.3)',
+							background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+							boxShadow: `0 4px 16px ${theme.palette.primary.main}50`,
 							'&:hover': {
-								background: 'linear-gradient(90deg, #33E0FF 0%, #00D9FF 100%)',
-								boxShadow: '0 4px 14px rgba(0,217,255,0.4)',
+								background: `linear-gradient(90deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
+								boxShadow: `0 8px 24px ${theme.palette.primary.main}60`,
+								transform: 'translateY(-2px)',
 							},
 							'&:disabled': {
-								background: 'rgba(0,217,255,0.4)',
+								background: `${theme.palette.primary.main}40`,
 								color: '#fff',
+								transform: 'none',
 							},
 						}}
 					>

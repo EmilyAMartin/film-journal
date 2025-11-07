@@ -209,12 +209,11 @@ const FilmCard = ({ film }) => {
 						onChange={(e) => setJournalText(e.target.value)}
 					/>
 				</DialogContent>
-				<DialogActions sx={{ px: 3, pb: 2 }}>
+				<DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
 					<Button
 						onClick={handleCloseJournal}
 						variant='outlined'
 						color='inherit'
-						sx={{ borderRadius: 4 }}
 					>
 						Cancel
 					</Button>
@@ -223,7 +222,6 @@ const FilmCard = ({ film }) => {
 						variant='contained'
 						color='primary'
 						disabled={!journalText.trim() || !journalTitle.trim()}
-						sx={{ borderRadius: 4 }}
 					>
 						Submit
 					</Button>

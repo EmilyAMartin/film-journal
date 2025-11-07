@@ -22,15 +22,16 @@ function App() {
 		palette: {
 			mode: mode, // Use the mode state variable
 			primary: {
-				main: '#00D9FF', // Vibrant teal
-				light: '#33E0FF',
-				dark: '#00B8D9',
+				// Use darker teal for light mode (better contrast), bright teal for dark mode
+				main: mode === 'dark' ? '#00D9FF' : '#008B8B', // Bright teal for dark, dark cyan/teal for light
+				light: mode === 'dark' ? '#33E0FF' : '#20B2AA',
+				dark: mode === 'dark' ? '#00B8D9' : '#006666',
 				contrastText: '#fff',
 			},
 			secondary: {
-				main: '#14B8A6', // Teal variant for secondary actions
-				light: '#26C9B8',
-				dark: '#0F9A8A',
+				main: mode === 'dark' ? '#14B8A6' : '#0D7377', // Darker for light mode
+				light: mode === 'dark' ? '#26C9B8' : '#14A085',
+				dark: mode === 'dark' ? '#0F9A8A' : '#0A5D61',
 				contrastText: '#fff',
 			},
 			background: {
@@ -41,6 +42,53 @@ function App() {
 				primary: mode === 'dark' ? '#ffffff' : '#121212',
 				secondary:
 					mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+			},
+		},
+		components: {
+			// Modern button styling
+			MuiButton: {
+				styleOverrides: {
+					root: {
+						borderRadius: '12px',
+						textTransform: 'none',
+						fontWeight: 600,
+						padding: '10px 24px',
+						boxShadow: 'none',
+						transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+						'&:hover': {
+							transform: 'translateY(-2px)',
+							boxShadow: '0 8px 16px rgba(0, 0, 0, 0.15)',
+						},
+						'&:active': {
+							transform: 'translateY(0px)',
+						},
+					},
+					contained: {
+						boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+						'&:hover': {
+							boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
+						},
+					},
+					outlined: {
+						borderWidth: '2px',
+						'&:hover': {
+							borderWidth: '2px',
+							boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+						},
+					},
+				},
+			},
+			// Modern IconButton styling
+			MuiIconButton: {
+				styleOverrides: {
+					root: {
+						transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+						'&:hover': {
+							transform: 'scale(1.1)',
+							backgroundColor: 'rgba(0, 0, 0, 0.04)',
+						},
+					},
+				},
 			},
 		},
 	});

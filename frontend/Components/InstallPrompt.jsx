@@ -109,7 +109,6 @@ const InstallPrompt = () => {
 							variant='contained'
 							startIcon={<InstallIcon />}
 							fullWidth
-							sx={{ borderRadius: 2 }}
 						>
 							Install App
 						</Button>
