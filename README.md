@@ -25,7 +25,7 @@ This project was inspired by my own habit of tracking films. I wanted a lightwei
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 - 🗒️ Journal films with personal notes and reflections
 - 🎥 Create and manage a watchlist of upcoming films
@@ -35,11 +35,11 @@ This project was inspired by my own habit of tracking films. I wanted a lightwei
 
 ---
 
-## 🖼️ Preview
+## Preview
 
 ---
 
-## 🧰 Technology Stack
+## Technology Stack
 
 - **Layout & Design:** Figma
 - **Frontend:** React JS
@@ -49,6 +49,6 @@ This project was inspired by my own habit of tracking films. I wanted a lightwei
 
 ---
 
-## 🙏 Credits
+## Credits
 
 Big thanks to everyone who encouraged and gave feedback during the development process. This project was a great opportunity to combine my love of movies with hands-on React development and user experience design.

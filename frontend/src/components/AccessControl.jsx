@@ -56,7 +56,7 @@ const AccessControl = ({ onAccessGranted }) => {
 				alignItems: 'center',
 				minHeight: '100vh',
 				background: `
-          linear-gradient(120deg, #ff6b35 0%, #fca365 40%, #ffe0c3 100%)
+          linear-gradient(120deg, #00D9FF 0%, #14B8A6 40%, #1a1a1a 100%)
         `,
 				padding: 2,
 			}}
@@ -74,7 +74,7 @@ const AccessControl = ({ onAccessGranted }) => {
 					boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
 				}}
 			>
-				<LockIcon sx={{ fontSize: 48, color: '#ff6b35', mb: 2 }} />
+				<LockIcon sx={{ fontSize: 48, color: '#00D9FF', mb: 2 }} />
 
 				<Typography
 					variant='h4'
@@ -107,9 +107,9 @@ const AccessControl = ({ onAccessGranted }) => {
 						sx={{
 							mb: 2,
 							'& .MuiOutlinedInput-root': {
-								'& fieldset': { borderColor: '#ff6b35' },
-								'&:hover fieldset': { borderColor: '#fca365' },
-								'&.Mui-focused fieldset': { borderColor: '#ff6b35' },
+								'& fieldset': { borderColor: '#00D9FF' },
+								'&:hover fieldset': { borderColor: '#33E0FF' },
+								'&.Mui-focused fieldset': { borderColor: '#00D9FF' },
 							},
 						}}
 					/>
@@ -134,14 +134,14 @@ const AccessControl = ({ onAccessGranted }) => {
 							borderRadius: 2,
 							py: 1.2,
 							fontWeight: 600,
-							background: 'linear-gradient(90deg, #ff6b35 0%, #f57c4c 100%)',
-							boxShadow: '0 3px 10px rgba(255,107,53,0.3)',
+							background: 'linear-gradient(90deg, #00D9FF 0%, #14B8A6 100%)',
+							boxShadow: '0 3px 10px rgba(0,217,255,0.3)',
 							'&:hover': {
-								background: 'linear-gradient(90deg, #f56b35 0%, #ff8755 100%)',
-								boxShadow: '0 4px 14px rgba(255,107,53,0.4)',
+								background: 'linear-gradient(90deg, #33E0FF 0%, #00D9FF 100%)',
+								boxShadow: '0 4px 14px rgba(0,217,255,0.4)',
 							},
 							'&:disabled': {
-								background: 'rgba(255,107,53,0.4)',
+								background: 'rgba(0,217,255,0.4)',
 								color: '#fff',
 							},
 						}}

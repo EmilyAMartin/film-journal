@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Route, Routes } from 'react-router-dom';
@@ -15,12 +15,33 @@ import { useAccessControl } from '../src/hooks/useAccessControl';
 import { register as registerServiceWorker } from '../src/serviceWorkerRegistration';
 
 function App() {
-	const [mode, setMode] = useState('light');
+	const [mode, setMode] = useState('dark'); // Default to dark mode
 	const { hasAccess, isChecking, grantAccess } = useAccessControl();
 
 	const theme = createTheme({
 		palette: {
-			mode,
+			mode: mode, // Use the mode state variable
+			primary: {
+				main: '#00D9FF', // Vibrant teal
+				light: '#33E0FF',
+				dark: '#00B8D9',
+				contrastText: '#fff',
+			},
+			secondary: {
+				main: '#14B8A6', // Teal variant for secondary actions
+				light: '#26C9B8',
+				dark: '#0F9A8A',
+				contrastText: '#fff',
+			},
+			background: {
+				default: mode === 'dark' ? '#121212' : '#f5f5f5', // Dark grey for dark mode, light grey for light mode
+				paper: mode === 'dark' ? '#1a1a1a' : '#ffffff', // Slightly lighter dark grey for cards in dark mode, white in light mode
+			},
+			text: {
+				primary: mode === 'dark' ? '#ffffff' : '#121212',
+				secondary:
+					mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+			},
 		},
 	});
 

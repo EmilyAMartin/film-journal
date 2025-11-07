@@ -171,7 +171,7 @@ const Account = () => {
 				>
 					<CardContent sx={{ p: 3 }}>
 						<Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-							<InfoIcon sx={{ mr: 2, fontSize: 24, color: '#ff6b35' }} />
+							<InfoIcon sx={{ mr: 2, fontSize: 24, color: '#00D9FF' }} />
 							<Typography
 								variant='h6'
 								fontWeight={600}
@@ -216,7 +216,7 @@ const Account = () => {
 										sx={{
 											p: 1.5,
 											borderRadius: 2,
-											background: '#ff6b35',
+											background: '#00D9FF',
 											mr: 2,
 										}}
 									>
@@ -262,8 +262,8 @@ const Account = () => {
 										borderRadius: 2,
 										py: 1.5,
 										fontWeight: 600,
-										background: '#ff6b35',
-										'&:hover': { background: '#e55a2b' },
+										background: '#00D9FF',
+										'&:hover': { background: '#00B8D9' },
 									}}
 								>
 									Export Backup
@@ -295,7 +295,7 @@ const Account = () => {
 										sx={{
 											p: 1.5,
 											borderRadius: 2,
-											background: '#ff6b35',
+											background: '#00D9FF',
 											mr: 2,
 										}}
 									>
@@ -332,7 +332,7 @@ const Account = () => {
 									<Typography
 										variant='caption'
 										sx={{
-											color: importFile ? '#ff6b35' : theme.palette.text.secondary,
+											color: importFile ? '#00D9FF' : theme.palette.text.secondary,
 											fontWeight: 500,
 											fontStyle: importFile ? 'normal' : 'italic',
 										}}
@@ -351,11 +351,11 @@ const Account = () => {
 										borderRadius: 2,
 										py: 1.5,
 										fontWeight: 600,
-										borderColor: '#ff6b35',
-										color: '#ff6b35',
+										borderColor: '#00D9FF',
+										color: '#00D9FF',
 										'&:hover': {
-											borderColor: '#e55a2b',
-											backgroundColor: 'rgba(255,107,53,0.1)',
+											borderColor: '#33E0FF',
+											backgroundColor: 'rgba(0,217,255,0.1)',
 										},
 									}}
 								>
@@ -376,8 +376,8 @@ const Account = () => {
 										borderRadius: 2,
 										py: 1.5,
 										fontWeight: 600,
-										background: '#ff6b35',
-										'&:hover': { background: '#e55a2b' },
+										background: '#00D9FF',
+										'&:hover': { background: '#00B8D9' },
 										'&:disabled': {
 											background: theme.palette.action.disabledBackground,
 											color: theme.palette.text.disabled,
@@ -398,7 +398,7 @@ const Account = () => {
 						<Card
 							sx={{
 								backgroundColor: theme.palette.background.paper,
-								border: `2px solid #ff6b35`,
+								border: `2px solid #00D9FF`,
 								borderRadius: 2,
 								boxShadow: theme.shadows[3],
 							}}
@@ -409,7 +409,7 @@ const Account = () => {
 										sx={{
 											p: 1.5,
 											borderRadius: 2,
-											background: '#ff6b35',
+											background: '#00D9FF',
 											mr: 2,
 										}}
 									>
@@ -449,11 +449,11 @@ const Account = () => {
 											borderRadius: 2,
 											py: 1.5,
 											fontWeight: 600,
-											borderColor: '#ff6b35',
-											color: '#ff6b35',
+											borderColor: '#00D9FF',
+											color: '#00D9FF',
 											'&:hover': {
-												borderColor: '#e55a2b',
-												backgroundColor: 'rgba(255,107,53,0.1)',
+												borderColor: '#33E0FF',
+												backgroundColor: 'rgba(0,217,255,0.1)',
 											},
 										}}
 									>
@@ -487,8 +487,8 @@ const Account = () => {
 												borderRadius: 2,
 												py: 1.5,
 												fontWeight: 600,
-												background: '#ff6b35',
-												'&:hover': { background: '#e55a2b' },
+												background: '#00D9FF',
+												'&:hover': { background: '#00B8D9' },
 											}}
 										>
 											Yes, Delete Everything
@@ -518,7 +518,7 @@ const Account = () => {
 										sx={{
 											p: 1.5,
 											borderRadius: 2,
-											background: '#ff6b35',
+											background: '#00D9FF',
 											mr: 2,
 										}}
 									>
@@ -549,11 +549,11 @@ const Account = () => {
 										borderRadius: 2,
 										py: 1.5,
 										fontWeight: 600,
-										borderColor: '#ff6b35',
-										color: '#ff6b35',
+										borderColor: '#00D9FF',
+										color: '#00D9FF',
 										'&:hover': {
-											borderColor: '#e55a2b',
-											backgroundColor: 'rgba(255,107,53,0.1)',
+											borderColor: '#33E0FF',
+											backgroundColor: 'rgba(0,217,255,0.1)',
 										},
 									}}
 								>

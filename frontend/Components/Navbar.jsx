@@ -4,11 +4,13 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import TheaterComedyOutlinedIcon from '@mui/icons-material/TheaterComedyOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import SettingsIcon from '@mui/icons-material/Settings';
+import SearchIcon from '@mui/icons-material/Search';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -60,15 +62,34 @@ const Navbar = ({ toggleTheme, mode }) => {
 						alignItems: 'center',
 					}}
 				>
-					<IconButton
+					<Box
 						component={NavLink}
 						to='/'
-						color='inherit'
-						edge='start'
-						sx={{ mr: 2 }}
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							textDecoration: 'none',
+							mr: 2,
+						}}
 					>
-						<TheaterComedyOutlinedIcon fontSize='large' />
-					</IconButton>
+						<Typography
+							variant='h5'
+							component='div'
+							sx={{
+								fontWeight: 700,
+								fontSize: { xs: '1.2rem', md: '1.5rem' },
+								'& .logo-part-1': {
+									color: 'text.primary',
+								},
+								'& .logo-part-2': {
+									color: 'primary.main',
+								},
+							}}
+						>
+							<span className='logo-part-1'>FILM</span>
+							<span className='logo-part-2'>JOURNAL</span>
+						</Typography>
+					</Box>
 					<Box
 						sx={{
 							flex: 1,
@@ -86,8 +107,15 @@ const Navbar = ({ toggleTheme, mode }) => {
 								sx={{
 									textTransform: 'none',
 									fontSize: '1.1rem',
+									color: 'text.primary',
 									'&.active': {
 										fontWeight: 'bold',
+										color: 'primary.main',
+										borderBottom: '2px solid',
+										borderColor: 'primary.main',
+										borderRadius: 0,
+									},
+									'&:hover': {
 										color: 'primary.main',
 									},
 								}}
@@ -98,12 +126,28 @@ const Navbar = ({ toggleTheme, mode }) => {
 					</Box>
 					<Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 2 }}>
 						<IconButton
+							color='inherit'
+							aria-label='search'
+							sx={{
+								color: 'text.primary',
+								'&:hover': {
+									color: 'primary.main',
+								},
+							}}
+						>
+							<SearchIcon />
+						</IconButton>
+						<IconButton
 							component={NavLink}
 							to='/Account'
 							color='inherit'
 							aria-label='settings'
 							sx={{
+								color: 'text.primary',
 								'&.active': {
+									color: 'primary.main',
+								},
+								'&:hover': {
 									color: 'primary.main',
 								},
 							}}
