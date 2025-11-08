@@ -26,7 +26,7 @@ function App() {
 				main: mode === 'dark' ? '#00D9FF' : '#008B8B', // Bright teal for dark, dark cyan/teal for light
 				light: mode === 'dark' ? '#33E0FF' : '#20B2AA',
 				dark: mode === 'dark' ? '#00B8D9' : '#006666',
-				contrastText: '#fff',
+				contrastText: mode === 'dark' ? '#fff' : '#fff', // Always white for contrast on colored backgrounds
 			},
 			secondary: {
 				main: mode === 'dark' ? '#14B8A6' : '#0D7377', // Darker for light mode

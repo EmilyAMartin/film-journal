@@ -216,11 +216,16 @@ const Account = () => {
 										sx={{
 											p: 1.5,
 											borderRadius: 2,
-											background: 'primary.main',
+											background: theme.palette.primary.main,
 											mr: 2,
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
 										}}
 									>
-										<BackupIcon sx={{ color: 'white', fontSize: 20 }} />
+										<BackupIcon
+											sx={{ color: theme.palette.primary.contrastText, fontSize: 20 }}
+										/>
 									</Box>
 									<Typography
 										variant='h6'
@@ -291,11 +296,16 @@ const Account = () => {
 										sx={{
 											p: 1.5,
 											borderRadius: 2,
-											background: 'primary.main',
+											background: theme.palette.primary.main,
 											mr: 2,
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
 										}}
 									>
-										<RestoreIcon sx={{ color: 'white', fontSize: 20 }} />
+										<RestoreIcon
+											sx={{ color: theme.palette.primary.contrastText, fontSize: 20 }}
+										/>
 									</Box>
 									<Typography
 										variant='h6'
@@ -390,11 +400,16 @@ const Account = () => {
 										sx={{
 											p: 1.5,
 											borderRadius: 2,
-											background: 'primary.main',
+											background: theme.palette.primary.main,
 											mr: 2,
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
 										}}
 									>
-										<DeleteIcon sx={{ color: 'white', fontSize: 20 }} />
+										<DeleteIcon
+											sx={{ color: theme.palette.primary.contrastText, fontSize: 20 }}
+										/>
 									</Box>
 									<Typography
 										variant='h6'
@@ -479,11 +494,16 @@ const Account = () => {
 										sx={{
 											p: 1.5,
 											borderRadius: 2,
-											background: 'primary.main',
+											background: theme.palette.primary.main,
 											mr: 2,
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
 										}}
 									>
-										<LogoutIcon sx={{ color: 'white', fontSize: 20 }} />
+										<LogoutIcon
+											sx={{ color: theme.palette.primary.contrastText, fontSize: 20 }}
+										/>
 									</Box>
 									<Typography
 										variant='h6'

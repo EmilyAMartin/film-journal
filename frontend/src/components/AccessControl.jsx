@@ -74,7 +74,7 @@ const AccessControl = ({ onAccessGranted }) => {
 					boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
 				}}
 			>
-				<LockIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+				<LockIcon sx={{ fontSize: 48, color: theme.palette.primary.dark, mb: 2 }} />
 
 				<Typography
 					variant='h4'
@@ -106,10 +106,30 @@ const AccessControl = ({ onAccessGranted }) => {
 						required
 						sx={{
 							mb: 2,
+							'& .MuiInputLabel-root': {
+								color: theme.palette.primary.dark,
+								'&.Mui-focused': {
+									color: theme.palette.primary.dark,
+								},
+							},
 							'& .MuiOutlinedInput-root': {
-								'& fieldset': { borderColor: 'primary.main' },
-								'&:hover fieldset': { borderColor: 'primary.light' },
-								'&.Mui-focused fieldset': { borderColor: 'primary.main' },
+								color: '#121212', // Dark text for visibility
+								backgroundColor: '#ffffff',
+								'& fieldset': {
+									borderColor: theme.palette.primary.dark, // Darker border for better contrast
+									borderWidth: '2px',
+								},
+								'&:hover fieldset': {
+									borderColor: theme.palette.primary.main,
+									borderWidth: '2px',
+								},
+								'&.Mui-focused fieldset': {
+									borderColor: theme.palette.primary.dark,
+									borderWidth: '2px',
+								},
+								'& input': {
+									color: '#121212', // Ensure input text is dark and visible
+								},
 							},
 						}}
 					/>
