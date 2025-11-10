@@ -414,7 +414,6 @@ const Account = () => {
 									<Typography
 										variant='h6'
 										fontWeight={600}
-										sx={{ color: '#d32f2f' }}
 									>
 										Danger Zone
 									</Typography>

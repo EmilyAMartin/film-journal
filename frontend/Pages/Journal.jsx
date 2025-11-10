@@ -49,7 +49,7 @@ const Journal = () => {
 				}}
 			>
 				{entries.length === 0 ? (
-					<p>No journal entries yet.</p>
+					<h3 style={{ textAlign: 'center' }}>No journal entries yet.</h3>
 				) : (
 					entries.map((entry, idx) => (
 						<JournalEntryCard
