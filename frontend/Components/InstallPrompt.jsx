@@ -23,13 +23,24 @@ const InstallPrompt = () => {
 	const [showPrompt, setShowPrompt] = useState(false);
 	const [showSuccess, setShowSuccess] = useState(false);
 
-	// Show prompt after a delay if installable
+	// Show prompt after a delay if installable and not previously dismissed
 	React.useEffect(() => {
-		if (canInstall && !isInstalled) {
+		// Check if user previously dismissed the prompt
+		const dismissed = localStorage.getItem('pwa-install-dismissed');
+		
+		// Primary: Show if installable and not dismissed
+		if (canInstall && !isInstalled && dismissed !== 'true') {
 			const timer = setTimeout(() => {
 				setShowPrompt(true);
 			}, 3000); // Show after 3 seconds
 			return () => clearTimeout(timer);
+		} 
+		// Fallback: Show after 10 seconds even if not installable (for cases where event hasn't fired yet)
+		else if (!isInstalled && dismissed !== 'true') {
+			const fallbackTimer = setTimeout(() => {
+				setShowPrompt(true);
+			}, 10000); // Show after 10 seconds as fallback
+			return () => clearTimeout(fallbackTimer);
 		}
 	}, [canInstall, isInstalled]);
 
@@ -38,6 +49,10 @@ const InstallPrompt = () => {
 		if (success) {
 			setShowPrompt(false);
 			setShowSuccess(true);
+		} else {
+			// If install fails, it might be because the prompt isn't available
+			// Just close the prompt - the browser's native install UI might be available
+			setShowPrompt(false);
 		}
 	};
 
@@ -47,21 +62,17 @@ const InstallPrompt = () => {
 		localStorage.setItem('pwa-install-dismissed', 'true');
 	};
 
-	// Don't show if user previously dismissed
-	React.useEffect(() => {
-		const dismissed = localStorage.getItem('pwa-install-dismissed');
-		if (dismissed === 'true') {
-			setShowPrompt(false);
-		}
-	}, []);
-
-	if (!showPrompt || isInstalled) return null;
+	// Don't render if app is already installed
+	if (isInstalled) {
+		return null;
+	}
 
 	return (
 		<>
 			{/* Install Prompt Card */}
 			<Snackbar
 				open={showPrompt}
+				onClose={handleDismiss}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
 				sx={{ mb: 2 }}
 			>
