@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import JournalEntryCard from '../Components/JournalEntryCard';
 import { getJournalEntries, setJournalEntries } from '../src/storageService';
+import Box from '@mui/material/Box';
 
 const Journal = () => {
 	const [entries, setEntriesState] = useState([]);
@@ -39,28 +40,37 @@ const Journal = () => {
 	}
 
 	return (
-		<div style={{ padding: '2rem' }}>
-			<div
-				style={{
-					display: 'flex',
-					flexWrap: 'wrap',
-					gap: '2rem',
-					marginTop: '2rem',
-				}}
-			>
-				{entries.length === 0 ? (
-					<h3 style={{ textAlign: 'center' }}>No journal entries yet.</h3>
-				) : (
-					entries.map((entry, idx) => (
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'center',
+				minHeight: '60vh',
+			}}
+		>
+			{entries.length === 0 ? (
+				<h3 style={{ textAlign: 'center' }}>No journal entries yet.</h3>
+			) : (
+				<Box
+					sx={{
+						display: 'flex',
+						flexWrap: 'wrap',
+						gap: '2rem',
+						justifyContent: 'center',
+						width: '100%',
+					}}
+				>
+					{entries.map((entry, idx) => (
 						<JournalEntryCard
 							key={idx}
 							entry={entry}
 							onDelete={handleDelete}
 						/>
-					))
-				)}
-			</div>
-		</div>
+					))}
+				</Box>
+			)}
+		</Box>
 	);
 };
 
