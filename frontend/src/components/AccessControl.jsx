@@ -156,12 +156,12 @@ const AccessControl = ({ onAccessGranted }) => {
 							background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
 							boxShadow: `0 4px 16px ${theme.palette.primary.main}50`,
 							'&:hover': {
-								background: `linear-gradient(90deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 100%)`,
+								background: `linear-gradient(90deg, ${theme.palette.primary.light} 100%, ${theme.palette.primary.main} 100%)`,
 								boxShadow: `0 8px 24px ${theme.palette.primary.main}60`,
 								transform: 'translateY(-2px)',
 							},
 							'&:disabled': {
-								background: `${theme.palette.primary.main}40`,
+								background: `${theme.palette.primary.main}100`,
 								color: '#fff',
 								transform: 'none',
 							},
