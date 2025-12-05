@@ -17,7 +17,7 @@ const AccessControl = ({ onAccessGranted }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [attempts, setAttempts] = useState(0);
-	const VALID_ACCESS_CODE = import.meta.env.VITE_ACCESS_CODE;
+	const VALID_ACCESS_CODE = import.meta.env.VITE_ACCESS_CODE || 'film2024';
 
 	useEffect(() => {
 		const hasAccess = localStorage.getItem('film_journal_access');

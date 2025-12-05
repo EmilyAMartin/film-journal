@@ -35,6 +35,8 @@ jobs:
 
       - name: Build
         working-directory: ./frontend
+        env:
+          VITE_ACCESS_CODE: ${{ secrets.VITE_ACCESS_CODE || 'film2024' }}
         run: npm run build
 
       - name: Setup Pages

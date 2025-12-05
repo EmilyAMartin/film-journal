@@ -15,6 +15,15 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import {
+	getFavorites,
+	addToFavorites,
+	removeFromFavorites,
+	getWatchlist,
+	addToWatchlist,
+	removeFromWatchlist,
+	addJournalEntry,
+} from '../src/storageService';
 
 const FilmActions = ({ film }) => {
 	const filmId = film?.id || film?.imdbID || film?.title;
@@ -29,64 +38,60 @@ const FilmActions = ({ film }) => {
 	const [journalTitle, setJournalTitle] = useState('');
 
 	useEffect(() => {
-		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+		const checkStatus = async () => {
+			const favorites = await getFavorites();
+			const watchlist = await getWatchlist();
 
-		setIsFavorited(favorites.some((f) => f.id === filmId));
-		setIsAdded(watchlist.some((w) => w.id === filmId));
+			setIsFavorited(favorites.some((f) => f.id === filmId || f.imdbID === filmId));
+			setIsAdded(watchlist.some((w) => w.id === filmId || w.imdbID === filmId));
+		};
+		checkStatus();
 	}, [filmId]);
 
-	const handleToggleFavorite = () => {
-		const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+	const handleToggleFavorite = async () => {
+		const filmData = {
+			id: filmId,
+			imdbID: filmId,
+			title: filmTitle,
+			year: filmYear,
+			poster: filmPoster,
+		};
 
 		if (isFavorited) {
-			const updated = favorites.filter((f) => f.id !== filmId);
-			localStorage.setItem('favorites', JSON.stringify(updated));
+			await removeFromFavorites(filmData);
 			setIsFavorited(false);
 		} else {
-			if (!favorites.some((f) => f.id === filmId)) {
-				favorites.push({
-					id: filmId,
-					title: filmTitle,
-					year: filmYear,
-					poster: filmPoster,
-				});
-			}
-			localStorage.setItem('favorites', JSON.stringify(favorites));
+			await addToFavorites(filmData);
 			setIsFavorited(true);
 		}
 	};
 
-	const handleToggleWatchlist = () => {
-		const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+	const handleToggleWatchlist = async () => {
+		const filmData = {
+			id: filmId,
+			imdbID: filmId,
+			title: filmTitle,
+			year: filmYear,
+			poster: filmPoster,
+		};
 
 		if (isAdded) {
-			const updated = watchlist.filter((w) => w.id !== filmId);
-			localStorage.setItem('watchlist', JSON.stringify(updated));
+			await removeFromWatchlist(filmData);
 			setIsAdded(false);
 		} else {
-			if (!watchlist.some((w) => w.id === filmId)) {
-				watchlist.push({
-					id: filmId,
-					title: filmTitle,
-					year: filmYear,
-					poster: filmPoster,
-				});
-			}
-			localStorage.setItem('watchlist', JSON.stringify(watchlist));
+			await addToWatchlist(filmData);
 			setIsAdded(true);
 		}
 	};
 
-	const handleJournalSubmit = () => {
-		const entries = JSON.parse(localStorage.getItem('journalEntries')) || [];
-		entries.push({
-			film: { id: filmId, title: filmTitle, year: filmYear, poster: filmPoster },
+	const handleJournalSubmit = async () => {
+		const entry = {
+			film: { id: filmId, imdbID: filmId, title: filmTitle, year: filmYear, poster: filmPoster },
 			title: journalTitle,
 			text: journalText,
 			date: new Date().toISOString(),
-		});
-		localStorage.setItem('journalEntries', JSON.stringify(entries));
+		};
+		await addJournalEntry(entry);
 		handleCloseJournal();
 	};
 

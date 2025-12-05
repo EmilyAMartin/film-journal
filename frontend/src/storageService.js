@@ -92,7 +92,8 @@ export const setFavorites = async (favorites) => {
 
 export const addToFavorites = async (film) => {
 	const favorites = await getFavorites();
-	if (!favorites.some((f) => JSON.stringify(f) === JSON.stringify(film))) {
+	const filmId = film.id || film.imdbID;
+	if (!favorites.some((f) => (f.id || f.imdbID) === filmId)) {
 		favorites.push(film);
 		return await setFavorites(favorites);
 	}
@@ -101,8 +102,9 @@ export const addToFavorites = async (film) => {
 
 export const removeFromFavorites = async (filmToRemove) => {
 	const favorites = await getFavorites();
+	const filmIdToRemove = filmToRemove.id || filmToRemove.imdbID;
 	const updated = favorites.filter(
-		(film) => JSON.stringify(film) !== JSON.stringify(filmToRemove)
+		(film) => (film.id || film.imdbID) !== filmIdToRemove
 	);
 	return await setFavorites(updated);
 };
@@ -119,7 +121,8 @@ export const setWatchlist = async (watchlist) => {
 
 export const addToWatchlist = async (film) => {
 	const watchlist = await getWatchlist();
-	if (!watchlist.some((f) => JSON.stringify(f) === JSON.stringify(film))) {
+	const filmId = film.id || film.imdbID;
+	if (!watchlist.some((f) => (f.id || f.imdbID) === filmId)) {
 		watchlist.push(film);
 		return await setWatchlist(watchlist);
 	}
@@ -128,8 +131,9 @@ export const addToWatchlist = async (film) => {
 
 export const removeFromWatchlist = async (filmToRemove) => {
 	const watchlist = await getWatchlist();
+	const filmIdToRemove = filmToRemove.id || filmToRemove.imdbID;
 	const updated = watchlist.filter(
-		(film) => JSON.stringify(film) !== JSON.stringify(filmToRemove)
+		(film) => (film.id || film.imdbID) !== filmIdToRemove
 	);
 	return await setWatchlist(updated);
 };
