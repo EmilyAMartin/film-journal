@@ -9,20 +9,39 @@ const Favorites = () => {
 	const [loading, setLoading] = useState(true);
 
 	const fetchDetails = async () => {
-		const stored = await getFavorites();
-		const detailed = await Promise.all(
-			stored.map((film) => getMovieById(film.imdbID || film.id))
-		);
-		setFavorites(detailed);
-		setLoading(false);
+		try {
+			const stored = (await getFavorites()) || [];
+			const valid = Array.isArray(stored) ? stored.filter(Boolean) : [];
+			if (valid.length === 0) {
+				setFavorites([]);
+				return;
+			}
+
+			const detailed = await Promise.all(
+				valid
+					.map((film) => {
+						const id = film && (film.imdbID || film.id);
+						if (!id) return null;
+						return getMovieById(id).catch((err) => {
+							console.error('getMovieById failed for', id, err);
+							return null;
+						});
+					})
+					.filter(Boolean)
+			);
+
+			setFavorites(detailed.filter(Boolean));
+		} catch (err) {
+			console.error('Failed to fetch favorite details:', err);
+			setFavorites([]);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	useEffect(() => {
 		fetchDetails();
-		// Listen for localForage changes (polling)
-		const interval = setInterval(() => {
-			fetchDetails();
-		}, 1000);
+		const interval = setInterval(fetchDetails, 2000);
 		return () => clearInterval(interval);
 	}, []);
 

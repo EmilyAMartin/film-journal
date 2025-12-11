@@ -9,19 +9,39 @@ const Watchlist = () => {
 	const [loading, setLoading] = useState(true);
 
 	const fetchDetails = async () => {
-		const stored = await getWatchlist();
-		const detailed = await Promise.all(
-			stored.map((film) => getMovieById(film.imdbID || film.id))
-		);
-		setWatchlist(detailed);
-		setLoading(false);
+		try {
+			const stored = (await getWatchlist()) || [];
+			const valid = Array.isArray(stored) ? stored.filter(Boolean) : [];
+			if (valid.length === 0) {
+				setWatchlist([]);
+				return;
+			}
+
+			const detailed = await Promise.all(
+				valid
+					.map((film) => {
+						const id = film && (film.imdbID || film.id);
+						if (!id) return null;
+						return getMovieById(id).catch((err) => {
+							console.error('getMovieById failed for', id, err);
+							return null;
+						});
+					})
+					.filter(Boolean)
+			);
+
+			setWatchlist(detailed.filter(Boolean));
+		} catch (err) {
+			console.error('Failed to fetch watchlist details:', err);
+			setWatchlist([]);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	useEffect(() => {
 		fetchDetails();
-		const interval = setInterval(() => {
-			fetchDetails();
-		}, 1000);
+		const interval = setInterval(fetchDetails, 2000);
 		return () => clearInterval(interval);
 	}, []);
 
