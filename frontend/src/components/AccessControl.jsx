@@ -17,9 +17,7 @@ const AccessControl = ({ onAccessGranted }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [attempts, setAttempts] = useState(0);
-	// Use VITE_ACCESS_CODE set at build-time. Default kept for local/dev convenience.
-	const VALID_ACCESS_CODE =
-		import.meta.env.VITE_ACCESS_CODE || 'filmjournal2025';
+	const VALID_ACCESS_CODE = import.meta.env.VITE_ACCESS_CODE || 'film2024';
 
 	useEffect(() => {
 		const hasAccess = localStorage.getItem('film_journal_access');
@@ -35,9 +33,7 @@ const AccessControl = ({ onAccessGranted }) => {
 
 		await new Promise((resolve) => setTimeout(resolve, 500));
 
-		const entered = (accessCode || '').trim();
-
-		if (entered === VALID_ACCESS_CODE) {
+		if (accessCode === VALID_ACCESS_CODE) {
 			localStorage.setItem('film_journal_access', 'true');
 			onAccessGranted();
 		} else {
@@ -108,7 +104,6 @@ const AccessControl = ({ onAccessGranted }) => {
 						onChange={(e) => setAccessCode(e.target.value)}
 						disabled={isLoading}
 						required
-						inputProps={{ autoComplete: 'new-password' }}
 						sx={{
 							mb: 2,
 							'& .MuiInputLabel-root': {
@@ -118,10 +113,10 @@ const AccessControl = ({ onAccessGranted }) => {
 								},
 							},
 							'& .MuiOutlinedInput-root': {
-								color: '#121212',
+								color: '#121212', // Dark text for visibility
 								backgroundColor: '#ffffff',
 								'& fieldset': {
-									borderColor: theme.palette.primary.dark,
+									borderColor: theme.palette.primary.dark, // Darker border for better contrast
 									borderWidth: '2px',
 								},
 								'&:hover fieldset': {
@@ -133,7 +128,7 @@ const AccessControl = ({ onAccessGranted }) => {
 									borderWidth: '2px',
 								},
 								'& input': {
-									color: '#121212',
+									color: '#121212', // Ensure input text is dark and visible
 								},
 							},
 						}}
