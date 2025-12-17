@@ -1,29 +1,19 @@
 export function register() {
 	if ('serviceWorker' in navigator) {
-		window.addEventListener('load', () => {
-			// Try production path first, then fallback to dev path
-			const swPath = import.meta.env.PROD ? '/dist/service-worker.js' : '/service-worker.js';
-			
-			navigator.serviceWorker
-				.register(swPath)
-				.then((registration) => {
-					console.log('SW registered: ', registration);
-				})
-				.catch((registrationError) => {
-					console.log('SW registration failed: ', registrationError);
-					// Try fallback path if first attempt failed
-					if (swPath === '/dist/service-worker.js') {
-						console.log('Trying fallback path: /service-worker.js');
-						navigator.serviceWorker
-							.register('/service-worker.js')
-							.then((registration) => {
-								console.log('SW registered (fallback): ', registration);
-							})
-							.catch((err) => {
-								console.log('SW registration failed (fallback): ', err);
-							});
-					}
-				});
+		const base = import.meta.env.BASE_URL || '/';
+		const swUrl = new URL('service-worker.js', base).toString();
+
+		window.addEventListener('load', async () => {
+			try {
+				// avoid registering if the SW file isn't present (prevents 404 in console)
+				const res = await fetch(swUrl, { method: 'HEAD' });
+				if (!res.ok) throw new Error(`Service worker not found at ${swUrl}`);
+
+				const registration = await navigator.serviceWorker.register(swUrl);
+				console.log('SW registered:', swUrl, registration);
+			} catch (registrationError) {
+				console.error('SW registration failed:', registrationError);
+			}
 		});
 	}
 }
